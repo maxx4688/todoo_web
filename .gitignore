@@ -1,0 +1,16 @@
+# Dependencies (if you run npm install)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Optional: keep firebase-config.js out of version control if you use secrets.
+# Uncomment the next line and use firebase-config.example.js as a template.
+# firebase-config.js

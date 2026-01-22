@@ -1,0 +1,9 @@
+{
+  "name": "todoo-web",
+  "version": "1.0.0",
+  "description": "ToDoo web app — standalone, portable. No Flutter required.",
+  "private": true,
+  "scripts": {
+    "start": "npx -y http-server -p 8080 -c-1 ."
+  }
+}

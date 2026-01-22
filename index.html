@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoo - Keep your activity mentioned</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login/Signup Page -->
+    <div id="auth-page" class="page active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>Hey, <span class="theme-color">folks</span></h1>
+                <p>Seamless todooo making for busy minds</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log In</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form active">
+                <input type="email" id="login-email" placeholder="Email" class="auth-input">
+                <div class="password-input-wrapper">
+                    <input type="password" id="login-password" placeholder="Password" class="auth-input">
+                    <button type="button" class="password-toggle" data-target="login-password">👁️</button>
+                </div>
+                <button class="forgot-password" id="forgot-password-btn">Forgot password?</button>
+                <button class="auth-button" id="login-btn">LOG IN</button>
+                <p class="auth-switch">Don't have an account? <span class="theme-color-link" data-switch="signup">Sign up</span></p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="auth-form">
+                <input type="email" id="signup-email" placeholder="New Email" class="auth-input">
+                <div class="password-input-wrapper">
+                    <input type="password" id="signup-password" placeholder="New Password" class="auth-input">
+                    <button type="button" class="password-toggle" data-target="signup-password">👁️</button>
+                </div>
+                <button class="auth-button" id="signup-btn">SIGN UP</button>
+                <p class="auth-switch">Already have an account? <span class="theme-color-link" data-switch="login">Log in</span></p>
+            </div>
+
+            <div class="auth-footer">
+                <p>dev.ashish.todoo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="theme-color">Forgot Password?</h2>
+            <input type="email" id="forgot-email" placeholder="Enter your email" class="auth-input">
+            <button class="auth-button" id="reset-password-btn">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page">
+        <!-- Header -->
+        <header class="app-header" id="app-header">
+            <button class="menu-toggle" id="menu-toggle">☰</button>
+            <h1 class="app-title">Just to-do</h1>
+            <button class="search-toggle" id="search-toggle">🔍</button>
+        </header>
+
+        <!-- Search Bar -->
+        <div id="search-bar" class="search-bar hidden">
+            <input type="text" id="search-input" placeholder="Search for todoo..." class="search-input">
+            <button class="close-search" id="close-search">✕</button>
+        </div>
+
+        <!-- Search Results -->
+        <div id="search-results" class="search-results hidden"></div>
+
+        <!-- Notes Container -->
+        <div id="notes-container" class="notes-container">
+            <div id="notes-list" class="notes-list"></div>
+            <div id="empty-state" class="empty-state hidden">
+                <p>Todooos empty</p>
+            </div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <div class="fab-container">
+            <button class="fab creative-fab" id="creative-fab" title="Creative Fields">
+                📄
+            </button>
+            <button class="fab add-fab" id="add-fab" title="Add new">
+                Add new
+            </button>
+        </div>
+    </div>
+
+    <!-- Creative Fields Page -->
+    <div id="creative-fields-page" class="page">
+        <header class="page-header">
+            <button class="back-button" data-back="home">←</button>
+            <h2 class="theme-color">Creative Fields</h2>
+            <button class="creative-save-btn" id="creative-save-btn">💾</button>
+        </header>
+        <div class="creative-form">
+            <input type="text" id="creative-title" placeholder="A creative title." class="form-input">
+            <textarea id="creative-content" placeholder="A detailed creative content," class="form-textarea"></textarea>
+        </div>
+    </div>
+
+    <!-- Creative Page (View) -->
+    <div id="creative-page" class="page">
+        <div class="creative-card-container">
+            <div class="creative-card" id="creative-card">
+                <div class="creative-card-content">
+                    <div class="creative-quote">"</div>
+                    <h3 id="creative-card-title">...</h3>
+                    <p id="creative-card-content">No content</p>
+                    <div class="creative-footer">
+                        <span>Created by</span>
+                        <span class="theme-color"> Todoo</span>
+                    </div>
+                </div>
+            </div>
+            <button class="save-card-btn" id="save-card-btn">Save to Gallery</button>
+        </div>
+    </div>
+
+    <!-- Add/Edit Note Modal -->
+    <div id="note-modal" class="modal">
+        <div class="modal-content note-modal-content">
+            <div class="modal-header">
+                <h2 class="theme-color" id="note-modal-title">Add new Note..</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="note-form">
+                <div class="title-row">
+                    <input type="text" id="note-title-input" placeholder="Title of your note." class="form-input">
+                    <button class="favorite-btn" id="note-favorite-btn">♡</button>
+                </div>
+                
+                <div class="checklist-section">
+                    <div class="checklist-header">
+                        <span class="checklist-icon">✓</span>
+                        <span class="checklist-title">Checklist</span>
+                    </div>
+                    <div class="checklist-input-row">
+                        <input type="text" id="checklist-item-input" placeholder="Add checklist item..." class="checklist-input">
+                        <button class="add-checklist-btn" id="add-checklist-btn">+</button>
+                    </div>
+                    <div id="checklist-items" class="checklist-items"></div>
+                </div>
+
+                <textarea id="note-content-input" placeholder="Detailed note here." class="form-textarea large"></textarea>
+                <button class="save-note-btn" id="save-note-btn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Note Page -->
+    <div id="view-note-page" class="page">
+        <header class="page-header">
+            <button class="back-button" data-back="home">✕</button>
+            <div class="header-actions">
+                <button class="header-action-btn" id="view-note-favorite-btn">♡</button>
+                <button class="header-action-btn" id="view-note-share-btn">↗</button>
+            </div>
+        </header>
+        <div class="view-note-content">
+            <h1 class="view-note-title theme-color" id="view-note-title"></h1>
+            <div class="view-note-body" id="view-note-body"></div>
+            <div id="view-note-checklist" class="view-note-checklist"></div>
+            <div class="view-note-timestamps" id="view-note-timestamps"></div>
+        </div>
+    </div>
+
+    <!-- Settings Drawer -->
+    <div id="settings-drawer" class="drawer">
+        <div class="drawer-overlay" id="drawer-overlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2 class="theme-color">Settings</h2>
+                <button class="close-drawer" id="close-drawer">✕</button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-section">
+                    <h3 class="theme-color">Theme</h3>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span>🌓</span>
+                            <span>Theme</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span>✨</span>
+                            <span>Glass</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="glass-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-label">
+                            <span>⊞</span>
+                            <span>Grid View</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="grid-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="theme-color">Colors</h3>
+                    <div class="color-options">
+                        <div class="color-option" data-color="#1A9DF7" style="background: #1A9DF7"></div>
+                        <div class="color-option" data-color="#D70040" style="background: #D70040"></div>
+                        <div class="color-option" data-color="#FFAA33" style="background: #FFAA33"></div>
+                        <div class="color-option custom-color" id="custom-color-picker">
+                            <input type="color" id="color-picker-input" value="#1A9DF7">
+                            <span>🎨</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <button class="logout-btn" id="logout-btn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Firebase SDK (compat build for script tags - exposes global firebase) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="utils.js"></script>
+    <script src="auth.js"></script>
+    <script src="notes.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
