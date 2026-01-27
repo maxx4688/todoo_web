@@ -3,66 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoo - Keep your activity mentioned</title>
+    <title>ToDoo - An extraordinary note</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="todoo.png" type="image/png">
 
 </head>
 <body>
-    <!-- Login/Signup Page -->
-    <div id="auth-page" class="page active">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h1>Hey, <span class="theme-color">folks</span></h1>
-                <p>Seamless todooo making for busy minds</p>
-            </div>
-            
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Log In</button>
-                <button class="auth-tab" data-tab="signup">Sign Up</button>
-            </div>
-
-            <!-- Login Form -->
-            <div id="login-form" class="auth-form active">
-                <input type="email" id="login-email" placeholder="Email" class="auth-input">
-                <div class="password-input-wrapper">
-                    <input type="password" id="login-password" placeholder="Password" class="auth-input">
-                    <button type="button" class="password-toggle" data-target="login-password">👁️</button>
-                </div>
-                <button class="forgot-password" id="forgot-password-btn">Forgot password?</button>
-                <button class="auth-button" id="login-btn">LOG IN</button>
-                <p class="auth-switch">Don't have an account? <span class="theme-color-link" data-switch="signup">Sign up</span></p>
-            </div>
-
-            <!-- Signup Form -->
-            <div id="signup-form" class="auth-form">
-                <input type="email" id="signup-email" placeholder="New Email" class="auth-input">
-                <div class="password-input-wrapper">
-                    <input type="password" id="signup-password" placeholder="New Password" class="auth-input">
-                    <button type="button" class="password-toggle" data-target="signup-password">👁️</button>
-                </div>
-                <button class="auth-button" id="signup-btn">SIGN UP</button>
-                <p class="auth-switch">Already have an account? <span class="theme-color-link" data-switch="login">Log in</span></p>
-            </div>
-
-            <div class="auth-footer">
-                <p>dev.ashish.todoo</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div id="forgot-password-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2 class="theme-color">Forgot Password?</h2>
-            <input type="email" id="forgot-email" placeholder="Enter your email" class="auth-input">
-            <button class="auth-button" id="reset-password-btn">Send Reset Link</button>
-        </div>
-    </div>
-
     <!-- Home Page -->
-    <div id="home-page" class="page">
+    <div id="home-page" class="page active">
         <!-- Header -->
         <header class="app-header" id="app-header">
             <button class="menu-toggle" id="menu-toggle">☰</button>
@@ -73,7 +21,6 @@
         <!-- Search Bar -->
         <div id="search-bar" class="search-bar hidden">
             <input type="text" id="search-input" placeholder="Search for todoo..." class="search-input">
-            <button class="close-search" id="close-search">✕</button>
         </div>
 
         <!-- Search Results -->
@@ -90,10 +37,11 @@
         <!-- Floating Action Buttons -->
         <div class="fab-container">
             <button class="fab creative-fab" id="creative-fab" title="Creative Fields">
-                📄
+                <span class="fab-emoji">📄</span>
             </button>
             <button class="fab add-fab" id="add-fab" title="Add new">
-                Add new
+                <span class="fab-icon">+</span>
+                <span class="fab-text">Add new</span>
             </button>
         </div>
     </div>
@@ -177,6 +125,76 @@
         </div>
     </div>
 
+    <!-- Developer Page -->
+    <div id="developer-page" class="page">
+        <header class="page-header">
+            <button class="back-button" data-back="home">←</button>
+            <h2 class="theme-color">Developer</h2>
+            <div style="width: 44px;"></div>
+        </header>
+        <div class="developer-content">
+            <div class="developer-card">
+                <div class="developer-avatar">
+                    <span>👨‍💻</span>
+                </div>
+                <h3 class="developer-name">Ashish</h3>
+                <p class="developer-role">Full Stack Developer</p>
+                
+                <div class="developer-info">
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div class="info-content">
+                            <span class="info-label">Email</span>
+                            <span class="info-value">alexmaxx8055@gmail.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">🌐</span>
+                        <div class="info-content">
+                            <span class="info-label">Website</span>
+                            <a href="#" class="info-value theme-color-link">Visit Portfolio</a>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-icon">👨‍💻</span>
+                        <div class="info-content">
+                            <span class="info-label">GitHub</span>
+                            <a href="https://github.com/maxx4688" class="info-value theme-color-link">GitHub Profile</a>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">💼</span>
+                        <div class="info-content">
+                            <span class="info-label">ToDoo App</span>
+                            <span class="info-value">Soon available</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="developer-skills">
+                    <h4 class="skills-title">Tech Stack</h4>
+                    <div class="skills-tags">
+                        <span class="skill-tag">HTML5</span>
+                        <span class="skill-tag">CSS3</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Flutter</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Supabase</span>
+                        <span class="skill-tag">Google Cloud</span>
+                    </div>
+                </div>
+                
+                <div class="developer-footer">
+                    <p class="developer-quote">"Building beautiful experiences, one line at a time"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Drawer -->
     <div id="settings-drawer" class="drawer">
         <div class="drawer-overlay" id="drawer-overlay"></div>
@@ -230,6 +248,16 @@
                             <input type="color" id="color-picker-input" value="#1A9DF7">
                             <span>🎨</span>
                         </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="settings-item" style="cursor: pointer;" id="developer-page-btn">
+                        <div class="settings-label">
+                            <span>👨‍💻</span>
+                            <span>Developer</span>
+                        </div>
+                        <span style="color: var(--text-secondary);">→</span>
                     </div>
                 </div>
 

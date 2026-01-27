@@ -10,6 +10,8 @@ const Notes = {
     },
 
     loadNotes() {
+        try{
+            Loading.show();
         const userId = Auth.getUserId();
         if (!userId) {
             console.error('No user ID available');
@@ -40,6 +42,13 @@ const Notes = {
                 console.error('Error loading notes:', error);
                 Toast.error('Failed to load notes');
             });
+
+        } catch (error) {
+            console.error('Error loading notes:', error);
+            Toast.error('Failed to load notes');
+        } finally {
+            Loading.hide();
+        }
     },
 
     async addNote(title, content, isFav, checklist = null) {

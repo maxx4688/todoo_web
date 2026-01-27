@@ -4,21 +4,11 @@ const Auth = {
     currentUser: null,
 
     init() {
-        // Listen for auth state changes
+        // Keep Firebase auth user in sync.
+        // Redirects are handled in the individual pages (auth.html / index.html).
         window.firebaseAuth.onAuthStateChanged((user) => {
             this.currentUser = user;
-            if (user) {
-                this.onAuthSuccess(user);
-            } else {
-                this.onAuthFailure();
-            }
         });
-
-        // Check if user is already logged in
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (!isLoggedIn && !this.currentUser) {
-            PageManager.showPage('auth-page');
-        }
     },
 
     async login(email, password) {
@@ -97,34 +87,12 @@ const Auth = {
             localStorage.removeItem('email');
             localStorage.removeItem('userId');
             this.currentUser = null;
-            PageManager.showPage('auth-page');
+            // After logout, send user to dedicated auth page
+            window.location.href = 'auth.html';
             Toast.success('Logged out successfully');
         } catch (error) {
             console.error('Logout error:', error);
             Toast.error('Failed to logout');
-        }
-    },
-
-    onAuthSuccess(user) {
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (isLoggedIn) {
-            PageManager.showPage('home-page');
-            // Refresh notes if Notes module is initialized
-            if (window.Notes && typeof window.Notes.loadNotes === 'function') {
-                window.Notes.loadNotes();
-            }
-        }
-    },
-
-    onAuthFailure() {
-        // Only redirect to auth if not already there
-        if (document.getElementById('auth-page').classList.contains('active')) {
-            return;
-        }
-        // Don't auto-redirect on page load if user was logged in
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            PageManager.showPage('auth-page');
         }
     },
 
@@ -148,7 +116,8 @@ const Auth = {
     },
 
     isAuthenticated() {
-        return this.currentUser !== null && localStorage.getItem('isLoggedIn') === 'true';
+        // Rely on the local flag; Firebase currentUser may lag slightly.
+        return localStorage.getItem('isLoggedIn') === 'true';
     },
 
     getUserId() {

@@ -1,17 +1,24 @@
 // Main Application Logic
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all modules
+    // Initialize theme and auth
     ThemeManager.init();
     Auth.init();
 
-    // Wait for Firebase to be ready
+    // After a short delay, decide where the user should be.
     setTimeout(() => {
-        if (Auth.isAuthenticated()) {
-            Notes.init();
-            Notes.loadNotes();
-            PageManager.showPage('home-page');
+        const isLoggedIn = Auth.isAuthenticated();
+
+        // If not logged in, always send to dedicated auth page
+        if (!isLoggedIn) {
+            window.location.href = 'auth.html';
+            return;
         }
+
+        // Logged in: initialize notes and show home page
+        Notes.init();
+        Notes.loadNotes();
+        PageManager.showPage('home-page');
     }, 500);
 
     setupEventListeners();
@@ -41,94 +48,8 @@ function setupEventListeners() {
 }
 
 function setupAuthEvents() {
-    // Tab switching
-    document.querySelectorAll('.auth-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabName = tab.dataset.tab;
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
-            tab.classList.add('active');
-            document.getElementById(`${tabName}-form`).classList.add('active');
-        });
-    });
-
-    // Login
-    document.getElementById('login-btn').addEventListener('click', async () => {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        
-        if (!email || !password) {
-            Toast.error('One or more fields are empty');
-            return;
-        }
-
-        const success = await Auth.login(email, password);
-        if (success) {
-            Notes.init();
-            Notes.loadNotes();
-            PageManager.showPage('home-page');
-        }
-    });
-
-    // Signup
-    document.getElementById('signup-btn').addEventListener('click', async () => {
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        
-        if (!email || !password) {
-            Toast.error('One or more fields are empty');
-            return;
-        }
-
-        const success = await Auth.signup(email, password);
-        if (success) {
-            Notes.init();
-            Notes.loadNotes();
-            PageManager.showPage('home-page');
-        }
-    });
-
-    // Forgot Password
-    document.getElementById('forgot-password-btn').addEventListener('click', () => {
-        PageManager.showModal('forgot-password-modal');
-    });
-
-    document.getElementById('reset-password-btn').addEventListener('click', async () => {
-        const email = document.getElementById('forgot-email').value;
-        if (!email) {
-            Toast.error('Please enter your email');
-            return;
-        }
-        await Auth.forgotPassword(email);
-    });
-
-    // Switch between login/signup
-    document.querySelectorAll('[data-switch]').forEach(link => {
-        link.addEventListener('click', () => {
-            const targetTab = link.dataset.switch;
-            document.querySelectorAll('.auth-tab').forEach(t => {
-                if (t.dataset.tab === targetTab) {
-                    t.click();
-                }
-            });
-        });
-    });
-
-    // Password toggle
-    document.querySelectorAll('.password-toggle').forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const targetId = toggle.dataset.target;
-            const input = document.getElementById(targetId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                toggle.textContent = '🙈';
-            } else {
-                input.type = 'password';
-                toggle.textContent = '👁️';
-            }
-        });
-    });
+    // Auth interactions now live on auth.html in auth-page.js.
+    // This is kept for compatibility but intentionally left empty.
 }
 
 function setupHomeEvents() {
@@ -238,6 +159,12 @@ function setupSettingsEvents() {
         document.querySelector('.custom-color').classList.add('active');
     });
 
+    // Developer page
+    document.getElementById('developer-page-btn')?.addEventListener('click', () => {
+        PageManager.showPage('developer-page');
+        document.getElementById('settings-drawer').classList.remove('active');
+    });
+
     // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
         if (confirm('Are you sure you want to logout?')) {
@@ -278,23 +205,29 @@ function setupCreativeEvents() {
 }
 
 function setupSearchEvents() {
-    // Search toggle
-    document.getElementById('search-toggle').addEventListener('click', () => {
-        const searchBar = document.getElementById('search-bar');
-        const searchResults = document.getElementById('search-results');
-        searchBar.classList.remove('hidden');
-        searchResults.classList.remove('hidden');
-        document.getElementById('search-input').focus();
-    });
+    // Search toggle (acts as open/close button in the header)
+    const searchToggle = document.getElementById('search-toggle');
+    const searchBar = document.getElementById('search-bar');
+    const searchResults = document.getElementById('search-results');
+    const searchInput = document.getElementById('search-input');
 
-    // Close search
-    document.getElementById('close-search').addEventListener('click', () => {
-        const searchBar = document.getElementById('search-bar');
-        const searchResults = document.getElementById('search-results');
-        searchBar.classList.add('hidden');
-        searchResults.classList.add('hidden');
-        document.getElementById('search-input').value = '';
-        Notes.renderNotes();
+    searchToggle.addEventListener('click', () => {
+        const isHidden = searchBar.classList.contains('hidden');
+
+        if (isHidden) {
+            // Open search
+            searchBar.classList.remove('hidden');
+            searchResults.classList.remove('hidden');
+            searchToggle.textContent = '✕';
+            searchInput.focus();
+        } else {
+            // Close search
+            searchBar.classList.add('hidden');
+            searchResults.classList.add('hidden');
+            searchToggle.textContent = '🔍';
+            searchInput.value = '';
+            Notes.renderNotes();
+        }
     });
 
     // Search input

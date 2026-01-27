@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ToDoo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="todoo.png" type="image/png">
+</head>
+<body>
+    <!-- Login/Signup Page -->
+    <div id="auth-page" class="page active">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>Hey, <span class="theme-color">folks</span></h1>
+                <p>Seamless todooo making for busy minds</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Log In</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form active">
+                <input type="email" id="login-email" placeholder="Email" class="auth-input">
+                <div class="password-input-wrapper">
+                    <input type="password" id="login-password" placeholder="Password" class="auth-input">
+                    <button type="button" class="password-toggle" data-target="login-password">👁️</button>
+                </div>
+                <button class="forgot-password" id="forgot-password-btn">Forgot password?</button>
+                <button class="auth-button" id="login-btn">LOG IN</button>
+                <p class="auth-switch">Don't have an account? <span class="theme-color-link" data-switch="signup">Sign up</span></p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form" class="auth-form">
+                <input type="email" id="signup-email" placeholder="New Email" class="auth-input">
+                <div class="password-input-wrapper">
+                    <input type="password" id="signup-password" placeholder="New Password" class="auth-input">
+                    <button type="button" class="password-toggle" data-target="signup-password">👁️</button>
+                </div>
+                <button class="auth-button" id="signup-btn">SIGN UP</button>
+                <p class="auth-switch">Already have an account? <span class="theme-color-link" data-switch="login">Log in</span></p>
+            </div>
+
+            <div class="auth-footer">
+                <p>dev.ashish.todoo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="theme-color">Forgot Password?</h2>
+            <input type="email" id="forgot-email" placeholder="Enter your email" class="auth-input">
+            <button class="auth-button" id="reset-password-btn">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Firebase SDK (compat build for script tags - exposes global firebase) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="utils.js"></script>
+    <script src="auth.js"></script>
+    <script src="auth-page.js"></script>
+</body>
+</html>
+

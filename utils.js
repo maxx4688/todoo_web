@@ -223,6 +223,31 @@ const PageManager = {
         if (page) {
             page.classList.add('active');
         }
+        
+        // Hide/show FAB buttons and creative page based on active page
+        const fabContainer = document.querySelector('.fab-container');
+        const creativePage = document.getElementById('creative-page');
+        
+        // Hide creative page and FAB buttons on view-note-page and developer-page
+        if (pageId === 'view-note-page' || pageId === 'developer-page') {
+            if (fabContainer) fabContainer.style.display = 'none';
+            if (creativePage) creativePage.style.display = 'none';
+        }
+        // Hide creative page on home page, show FAB buttons
+        else if (pageId === 'home-page') {
+            if (fabContainer) fabContainer.style.display = 'flex';
+            if (creativePage) creativePage.style.display = 'none';
+        }
+        // Show creative page only when on creative-page itself
+        else if (pageId === 'creative-page') {
+            if (fabContainer) fabContainer.style.display = 'none';
+            if (creativePage) creativePage.style.display = '';
+        }
+        // Default: show FAB buttons, hide creative page
+        else {
+            if (fabContainer) fabContainer.style.display = 'flex';
+            if (creativePage) creativePage.style.display = 'none';
+        }
     },
 
     showModal(modalId) {
