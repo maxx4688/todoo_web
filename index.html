@@ -5,44 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoo - An extraordinary note</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="todoo.png" type="image/png">
+    <link rel="icon" href="todoo.png?v=2" type="image/png">
 
 </head>
 <body>
     <!-- Home Page -->
     <div id="home-page" class="page active">
-        <!-- Header -->
-        <header class="app-header" id="app-header">
-            <button class="menu-toggle" id="menu-toggle">☰</button>
-            <h1 class="app-title">Just to-do</h1>
-            <button class="search-toggle" id="search-toggle">🔍</button>
-        </header>
+        <!-- Settings Side Panel -->
+        <div id="settings-drawer" class="settings-panel">
+            <div class="settings-panel-content">
+                <div class="drawer-header">
+                    <h2 class="theme-color">Settings</h2>
+                    <button class="close-drawer" id="close-drawer">✕</button>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-section">
+                        <h3 class="theme-color">Theme</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <span>🌓</span>
+                                <span>Theme</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <span>✨</span>
+                                <span>Glass</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="glass-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <span>⊞</span>
+                                <span>Grid View</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="grid-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
 
-        <!-- Search Bar -->
-        <div id="search-bar" class="search-bar hidden">
-            <input type="text" id="search-input" placeholder="Search for todoo..." class="search-input">
-        </div>
+                    <div class="settings-section">
+                        <h3 class="theme-color">Colors</h3>
+                        <div class="color-options">
+                            <div class="color-option" data-color="#1A9DF7" style="background: #1A9DF7"></div>
+                            <div class="color-option" data-color="#D70040" style="background: #D70040"></div>
+                            <div class="color-option" data-color="#FFAA33" style="background: #FFAA33"></div>
+                            <div class="color-option custom-color" id="custom-color-picker">
+                                <input type="color" id="color-picker-input" value="#1A9DF7">
+                                <span>🎨</span>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Search Results -->
-        <div id="search-results" class="search-results hidden"></div>
+                    <div class="settings-section">
+                        <div class="settings-item" style="cursor: pointer;" id="developer-page-btn">
+                            <div class="settings-label">
+                                <span>👨‍💻</span>
+                                <span>Developer</span>
+                            </div>
+                            <span style="color: var(--text-secondary);">→</span>
+                        </div>
+                    </div>
 
-        <!-- Notes Container -->
-        <div id="notes-container" class="notes-container">
-            <div id="notes-list" class="notes-list"></div>
-            <div id="empty-state" class="empty-state hidden">
-                <p>Todooos empty</p>
+                    <div class="settings-section">
+                        <button class="logout-btn" id="logout-btn">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Floating Action Buttons -->
-        <div class="fab-container">
-            <button class="fab creative-fab" id="creative-fab" title="Creative Fields">
-                <span class="fab-emoji">📄</span>
-            </button>
-            <button class="fab add-fab" id="add-fab" title="Add new">
-                <span class="fab-icon">+</span>
-                <span class="fab-text">Add new</span>
-            </button>
+        <!-- Main Content Wrapper -->
+        <div class="home-content-wrapper">
+            <!-- Header -->
+            <header class="app-header" id="app-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle">☰</button>
+                    <img src="todoo.png" alt="ToDoo" class="app-icon">
+                    <h1 class="app-title">Just to-do</h1>
+                </div>
+                <div class="header-search-container">
+                    <input type="text" id="search-input" placeholder="Search for todoo..." class="header-search-input">
+                    <button class="search-clear-btn" id="search-clear-btn" style="display: none;">✕</button>
+                </div>
+            </header>
+
+            <!-- Search Results -->
+            <div id="search-results" class="search-results hidden"></div>
+
+            <!-- Notes Container -->
+            <div id="notes-container" class="notes-container">
+                <div id="notes-list" class="notes-list"></div>
+                <div id="empty-state" class="empty-state hidden">
+                    <p>Todooos empty</p>
+                </div>
+            </div>
+
+            <!-- Floating Action Buttons -->
+            <div class="fab-container">
+                <button class="fab creative-fab" id="creative-fab" title="Creative Fields">
+                    <span class="fab-emoji">📄</span>
+                </button>
+                <button class="fab add-fab" id="add-fab" title="Add new">
+                    <span class="fab-icon">+</span>
+                    <span class="fab-text">Add new</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -195,78 +271,6 @@
         </div>
     </div>
 
-    <!-- Settings Drawer -->
-    <div id="settings-drawer" class="drawer">
-        <div class="drawer-overlay" id="drawer-overlay"></div>
-        <div class="drawer-content">
-            <div class="drawer-header">
-                <h2 class="theme-color">Settings</h2>
-                <button class="close-drawer" id="close-drawer">✕</button>
-            </div>
-            <div class="settings-content">
-                <div class="settings-section">
-                    <h3 class="theme-color">Theme</h3>
-                    <div class="settings-item">
-                        <div class="settings-label">
-                            <span>🌓</span>
-                            <span>Theme</span>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="theme-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="settings-item">
-                        <div class="settings-label">
-                            <span>✨</span>
-                            <span>Glass</span>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="glass-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="settings-item">
-                        <div class="settings-label">
-                            <span>⊞</span>
-                            <span>Grid View</span>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="grid-toggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h3 class="theme-color">Colors</h3>
-                    <div class="color-options">
-                        <div class="color-option" data-color="#1A9DF7" style="background: #1A9DF7"></div>
-                        <div class="color-option" data-color="#D70040" style="background: #D70040"></div>
-                        <div class="color-option" data-color="#FFAA33" style="background: #FFAA33"></div>
-                        <div class="color-option custom-color" id="custom-color-picker">
-                            <input type="color" id="color-picker-input" value="#1A9DF7">
-                            <span>🎨</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <div class="settings-item" style="cursor: pointer;" id="developer-page-btn">
-                        <div class="settings-label">
-                            <span>👨‍💻</span>
-                            <span>Developer</span>
-                        </div>
-                        <span style="color: var(--text-secondary);">→</span>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <button class="logout-btn" id="logout-btn">Logout</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay hidden">

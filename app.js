@@ -55,7 +55,8 @@ function setupAuthEvents() {
 function setupHomeEvents() {
     // Menu toggle
     document.getElementById('menu-toggle').addEventListener('click', () => {
-        document.getElementById('settings-drawer').classList.add('active');
+        const settingsPanel = document.getElementById('settings-drawer');
+        settingsPanel.classList.toggle('active');
     });
 
     // Add note FAB
@@ -113,10 +114,6 @@ function setupNoteModalEvents() {
 function setupSettingsEvents() {
     // Close drawer
     document.getElementById('close-drawer').addEventListener('click', () => {
-        document.getElementById('settings-drawer').classList.remove('active');
-    });
-
-    document.getElementById('drawer-overlay').addEventListener('click', () => {
         document.getElementById('settings-drawer').classList.remove('active');
     });
 
@@ -205,39 +202,48 @@ function setupCreativeEvents() {
 }
 
 function setupSearchEvents() {
-    // Search toggle (acts as open/close button in the header)
-    const searchToggle = document.getElementById('search-toggle');
-    const searchBar = document.getElementById('search-bar');
-    const searchResults = document.getElementById('search-results');
     const searchInput = document.getElementById('search-input');
+    const searchClearBtn = document.getElementById('search-clear-btn');
+    const searchResults = document.getElementById('search-results');
 
-    searchToggle.addEventListener('click', () => {
-        const isHidden = searchBar.classList.contains('hidden');
-
-        if (isHidden) {
-            // Open search
-            searchBar.classList.remove('hidden');
-            searchResults.classList.remove('hidden');
-            searchToggle.textContent = '✕';
-            searchInput.focus();
+    // Show/hide clear button based on input value
+    function updateClearButton() {
+        if (searchInput.value.trim().length > 0) {
+            searchClearBtn.style.display = 'flex';
         } else {
-            // Close search
-            searchBar.classList.add('hidden');
-            searchResults.classList.add('hidden');
-            searchToggle.textContent = '🔍';
-            searchInput.value = '';
-            Notes.renderNotes();
+            searchClearBtn.style.display = 'none';
         }
+    }
+
+    // Clear search
+    searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        updateClearButton();
+        Notes.renderNotes();
+        searchResults.classList.add('hidden');
     });
 
     // Search input
     let searchTimeout;
-    document.getElementById('search-input').addEventListener('input', (e) => {
+    searchInput.addEventListener('input', (e) => {
+        updateClearButton();
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            Notes.searchNotes(e.target.value);
-        }, 300);
+        
+        const query = e.target.value.trim();
+        if (query.length > 0) {
+            searchResults.classList.remove('hidden');
+            searchTimeout = setTimeout(() => {
+                Notes.searchNotes(query);
+            }, 300);
+        } else {
+            searchResults.classList.add('hidden');
+            Notes.renderNotes();
+        }
     });
+
+    // Initialize clear button state
+    updateClearButton();
 }
 
 function setupGeneralEvents() {
