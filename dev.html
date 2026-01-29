@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer - ToDoo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="todoo.png?v=2" type="image/png">
+</head>
+<body>
+    <div id="developer-page" class="page active">
+        <header class="page-header">
+            <button class="back-button" onclick="window.location.href='index.html'">←</button>
+            <h2 class="theme-color">Developer</h2>
+            <div style="width: 44px;"></div>
+        </header>
+        <div class="developer-content">
+            <div class="developer-card">
+                <div class="developer-avatar">
+                    <span>👨‍💻</span>
+                </div>
+                <h3 class="developer-name">Ashish</h3>
+                <p class="developer-role">Full Stack Developer</p>
+                
+                <p class="developer-intro">
+                    I&apos;m building ToDoo as a calm, fast space for organizing ideas. When I&apos;m not coding, I&apos;m usually sketching new interfaces and polishing the little details so everything feels effortless.
+                </p>
+
+                <div class="developer-info">
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div class="info-content">
+                            <span class="info-label">Email</span>
+                            <span class="info-value">alexmaxx8055@gmail.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">👨‍💻</span>
+                        <div class="info-content">
+                            <span class="info-label">GitHub</span>
+                            <a href="https://github.com/maxx4688" class="info-value theme-color-link">GitHub Profile</a>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">💼</span>
+                        <div class="info-content">
+                            <span class="info-label">ToDoo</span>
+                            <span class="info-value">Crafted for clean, everyday productivity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="developer-skills">
+                    <h4 class="skills-title">Tech stack</h4>
+                    <div class="skills-tags">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Flutter</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+                </div>
+
+                <div class="developer-footer">
+                    <p class="developer-quote">"Building beautiful experiences, one note at a time."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script>
+        // Keep theme consistent with the rest of the app
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.ThemeManager) {
+                window.ThemeManager.init();
+            }
+        });
+    </script>
+</body>
+</html>
+

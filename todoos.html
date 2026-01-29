@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoo - An extraordinary note</title>
+    <title>Your Todoos - ToDoo</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="todoo.png?v=2" type="image/png">
-
 </head>
 <body>
-    <!-- Home Page -->
+    <!-- Todoos Page (uses same app layout, focused on notes) -->
     <div id="home-page" class="page active">
         <!-- Settings Side Panel -->
         <div id="settings-drawer" class="settings-panel">
@@ -83,98 +82,31 @@
             </div>
         </div>
 
-        <!-- Main Content Wrapper -->
+        <!-- Content Wrapper -->
         <div class="home-content-wrapper">
-            <!-- Header / Navbar -->
+            <!-- Header -->
             <header class="app-header" id="app-header">
                 <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle">☰</button>
                     <img src="todoo.png" alt="ToDoo" class="app-icon">
-                    <h1 class="app-title">Just to-do</h1>
+                    <h1 class="app-title">Your todoos</h1>
                 </div>
-
-                <nav class="main-nav">
-                    <button class="nav-link active" data-nav="home">Home</button>
-                    <button class="nav-link" data-nav="todoos">Todoos</button>
-                    <button class="nav-link" data-nav="developer">Developer</button>
-                    <button class="nav-link" data-nav="suggestions">Suggestions</button>
-                </nav>
-
-                <div class="header-actions">
-                    <div class="header-search-container">
-                        <input type="text" id="search-input" placeholder="Search for todoo..." class="header-search-input">
-                        <button class="search-clear-btn" id="search-clear-btn" style="display: none;">✕</button>
-                    </div>
-                    <button class="primary-auth-btn" id="primary-auth-btn">Login / Sign up</button>
-                    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Open settings">☰</button>
+                <div class="header-search-container">
+                    <input type="text" id="search-input" placeholder="Search in your todoos..." class="header-search-input">
+                    <button class="search-clear-btn" id="search-clear-btn" style="display: none;">✕</button>
                 </div>
             </header>
-
-            <!-- Hero / Introduction Section -->
-            <section class="hero-section" id="home-hero">
-                <div class="hero-text">
-                    <p class="hero-eyebrow">Discover your calm workspace</p>
-                    <h2>Fuel your <span class="theme-color">focus</span> with a smarter ToDoo.</h2>
-                    <p class="hero-subtitle">
-                        ToDoo turns scattered thoughts into clear, beautiful notes and todoos.
-                        Capture ideas, plan your day, and return to what matters in seconds.
-                    </p>
-                    <div class="hero-actions">
-                        <span class="hero-secondary-text">No clutter, just clean productivity.</span>
-                    </div>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <span class="stat-value">15k+</span>
-                            <span class="stat-label">Notes created</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">4.8</span>
-                            <span class="stat-label">Average satisfaction</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">24/7</span>
-                            <span class="stat-label">Cloud-synced</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-media">
-                    <div class="hero-card">
-                        <img src="assets/card.png" alt="todoo preview" class="hero-image">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Suggestions / Why ToDoo Section -->
-            <section id="suggestions-section" class="info-section suggestions-section">
-                <h3>Why teams love <span class="theme-color">ToDoo</span></h3>
-                <p class="info-subtitle">
-                    Built for makers, developers, and busy humans who need a calm space to think.
-                </p>
-                <div class="info-grid">
-                    <article class="info-card">
-                        <h4>Capture in seconds</h4>
-                        <p>Create todoos, rich notes, and checklists with a single tap, so ideas never slip away.</p>
-                    </article>
-                    <article class="info-card">
-                        <h4>Stay beautifully organized</h4>
-                        <p>Powerful search, favorites, and creative fields keep your workspace clean and inspiring.</p>
-                    </article>
-                    <article class="info-card">
-                        <h4>Share and remember</h4>
-                        <p>Turn quick ideas into polished, sharable notes that your future self will thank you for.</p>
-                    </article>
-                </div>
-            </section>
 
             <!-- Search Results -->
             <div id="search-results" class="search-results hidden"></div>
 
-            <!-- Notes Section (visible after login) -->
-            <section id="notes-section" class="notes-section hidden">
+            <!-- Notes Container -->
+            <section id="notes-section" class="notes-section">
                 <div class="notes-section-header">
                     <div>
-                        <h3>Your <span class="theme-color">todoos</span> & notes</h3>
+                        <h3>Your <span class="theme-color">todoos</span></h3>
                         <p class="notes-section-subtitle">
-                            Once you log in, everything you write lives here—fast, simple, and always in sync.
+                            All your notes, lists, and ideas live here.
                         </p>
                     </div>
                 </div>
@@ -186,82 +118,8 @@
                 </div>
             </section>
 
-            <!-- Todoos highlight section (visible when logged in) -->
-            <section id="todoos-entry-section" class="todoos-highlight-section hidden">
-                <div class="todoos-highlight-inner" onclick="window.location.href='todoos.html'">
-                    <div class="todoos-highlight-text">
-                        <p class="hero-eyebrow">Your focused workspace</p>
-                        <h3>Open the <span class="theme-color">Todoos</span> board.</h3>
-                        <p class="todoos-highlight-subtitle">
-                            Switch from browsing to doing. In the todoos view you can create rich notes, manage checklists,
-                            star your favorites, and search across everything instantly.
-                        </p>
-                        <ul class="todoos-feature-list">
-                            <li>Fast, card-based layout for todos and notes</li>
-                            <li>Smart search and filters to find anything quickly</li>
-                            <li>Checklists, links, and favorites for important work</li>
-                            <li>Creative view for turning ideas into polished cards</li>
-                        </ul>
-                    </div>
-                    <div class="todoos-highlight-visual">
-                        <div class="todoos-pill-row">
-                            <span class="todoos-pill">Today</span>
-                            <span class="todoos-pill">Ideas</span>
-                            <span class="todoos-pill">Work</span>
-                        </div>
-                        <div class="todoos-preview-card">
-                            <div class="todoos-preview-header">
-                                <span class="todoos-preview-dot"></span>
-                                <span class="todoos-preview-title">Plan your perfect day</span>
-                            </div>
-                            <p class="todoos-preview-body">
-                                Draft tasks, add quick links, and check things off as you go.
-                            </p>
-                            <div class="todoos-preview-checks">
-                                <span>☑ Morning focus block</span>
-                                <span>☐ Ship one tiny improvement</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Android App Feature Section -->
-            <section id="android-section" class="android-section">
-                <div class="android-image-wrapper">
-                    <img src="assets/todoo_light.jpeg" alt="ToDoo Android preview light" class="android-bg android-bg-light">
-                    <img src="assets/todoo_dark.jpeg" alt="ToDoo Android preview dark" class="android-bg android-bg-dark">
-
-                    <div class="android-overlay">
-                        <p class="hero-eyebrow">ToDoo for Android</p>
-                        <h3>Carry your <span class="theme-color">todoos</span> in your pocket.</h3>
-
-                        <div class="android-extra">
-                            <p class="android-subtitle">
-                                Capture ideas the moment they appear and keep your day on track with a clean, focused
-                                mobile experience that stays in sync with the web app.
-                            </p>
-                            <ul class="android-feature-list">
-                                <li>Beautiful, thumb-friendly layout for quick adding and checking.</li>
-                                <li>Offline-friendly drafts that sync when you come back online.</li>
-                                <li>Fast search across notes and todoos from your phone.</li>
-                            </ul>
-                            <div class="android-badge-row">
-                                <div class="android-badge coming-soon-badge">
-                                    <span class="badge-chip">Coming soon</span>
-                                    <div class="badge-text">
-                                        <span class="badge-title">ToDoo Android app</span>
-                                        <span class="badge-subtitle">Built with the same calm design</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Floating Action Buttons (shown only when logged in) -->
-            <div class="fab-container hidden" id="fab-container">
+            <!-- Floating Action Buttons -->
+            <div class="fab-container" id="fab-container">
                 <button class="fab creative-fab" id="creative-fab" title="Creative Fields">
                     <span class="fab-emoji">📄</span>
                 </button>
@@ -273,7 +131,7 @@
         </div>
     </div>
 
-    <!-- Creative Fields Page -->
+    <!-- Reuse existing modals/pages for notes & creative -->
     <div id="creative-fields-page" class="page">
         <header class="page-header">
             <button class="back-button" data-back="home">←</button>
@@ -286,7 +144,6 @@
         </div>
     </div>
 
-    <!-- Creative Page (View) -->
     <div id="creative-page" class="page">
         <div class="creative-card-container">
             <div class="creative-card" id="creative-card">
@@ -304,7 +161,6 @@
         </div>
     </div>
 
-    <!-- Add/Edit Note Modal -->
     <div id="note-modal" class="modal">
         <div class="modal-content note-modal-content">
             <div class="modal-header">
@@ -335,7 +191,6 @@
         </div>
     </div>
 
-    <!-- View Note Page -->
     <div id="view-note-page" class="page">
         <header class="page-header">
             <button class="back-button" data-back="home">✕</button>
@@ -360,16 +215,28 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden"></div>
 
-    <!-- Firebase SDK (compat build for script tags - exposes global firebase) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
-    
+
     <!-- App Scripts -->
     <script src="utils.js"></script>
     <script src="auth.js"></script>
     <script src="notes.js"></script>
     <script src="app.js"></script>
+
+    <script>
+        // Redirect to auth if not logged in when visiting todoos directly
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (!window.Auth || !window.Auth.isAuthenticated()) {
+                    window.location.href = 'auth.html';
+                }
+            }, 400);
+        });
+    </script>
 </body>
 </html>
+

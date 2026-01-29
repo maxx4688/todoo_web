@@ -5,20 +5,48 @@ document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     Auth.init();
 
-    // After a short delay, decide where the user should be.
+    // After a short delay, decide how the home page should look.
     setTimeout(() => {
         const isLoggedIn = Auth.isAuthenticated();
+        const isTodoosPage = window.location.pathname.endsWith('todoos.html');
 
-        // If not logged in, always send to dedicated auth page
-        if (!isLoggedIn) {
-            window.location.href = 'auth.html';
-            return;
+        const notesSection = document.getElementById('notes-section');
+        const fabContainer = document.getElementById('fab-container');
+        const primaryAuthBtn = document.getElementById('primary-auth-btn');
+        const todoosEntry = document.getElementById('todoos-entry-section');
+
+        if (isTodoosPage) {
+            // Todoos page: require login, then show full notes experience.
+            if (!isLoggedIn) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            Notes.init();
+            Notes.loadNotes();
+
+            notesSection?.classList.remove('hidden');
+            fabContainer?.classList.remove('hidden');
+        } else {
+            // Marketing / home page.
+            PageManager.showPage('home-page');
+
+            // Notes should not be visible on the home page anymore.
+            notesSection?.classList.add('hidden');
+            fabContainer?.classList.add('hidden');
+
+            if (isLoggedIn) {
+                todoosEntry?.classList.remove('hidden');
+                if (primaryAuthBtn) {
+                    primaryAuthBtn.textContent = 'Go to your todoos';
+                }
+            } else {
+                todoosEntry?.classList.add('hidden');
+                if (primaryAuthBtn) {
+                    primaryAuthBtn.textContent = 'Login / Sign up';
+                }
+            }
         }
-
-        // Logged in: initialize notes and show home page
-        Notes.init();
-        Notes.loadNotes();
-        PageManager.showPage('home-page');
     }, 500);
 
     setupEventListeners();
@@ -53,20 +81,57 @@ function setupAuthEvents() {
 }
 
 function setupHomeEvents() {
-    // Menu toggle
-    document.getElementById('menu-toggle').addEventListener('click', () => {
+    // Settings drawer toggle
+    document.getElementById('menu-toggle')?.addEventListener('click', () => {
         const settingsPanel = document.getElementById('settings-drawer');
         settingsPanel.classList.toggle('active');
     });
 
+    // Primary auth buttons (header + hero)
+    function handleAuthCta() {
+        if (Auth.isAuthenticated()) {
+            window.location.href = 'todoos.html';
+        } else {
+            window.location.href = 'auth.html';
+        }
+    }
+
+    document.getElementById('primary-auth-btn')?.addEventListener('click', handleAuthCta);
+    document.getElementById('hero-cta-btn')?.addEventListener('click', handleAuthCta);
+
+    // Navbar navigation
+    document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.nav;
+
+            // Update active state for all nav buttons
+            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (target === 'home') {
+                document.getElementById('home-hero')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (target === 'todoos') {
+                if (Auth.isAuthenticated()) {
+                    window.location.href = 'todoos.html';
+                } else {
+                    window.location.href = 'auth.html';
+                }
+            } else if (target === 'developer') {
+                window.location.href = 'dev.html';
+            } else if (target === 'suggestions') {
+                document.getElementById('suggestions-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
     // Add note FAB
-    document.getElementById('add-fab').addEventListener('click', () => {
+    document.getElementById('add-fab')?.addEventListener('click', () => {
         Notes.currentNoteId = null;
         Notes.openNoteModal();
     });
 
     // Creative fields FAB
-    document.getElementById('creative-fab').addEventListener('click', () => {
+    document.getElementById('creative-fab')?.addEventListener('click', () => {
         PageManager.showPage('creative-fields-page');
     });
 }
@@ -158,8 +223,7 @@ function setupSettingsEvents() {
 
     // Developer page
     document.getElementById('developer-page-btn')?.addEventListener('click', () => {
-        PageManager.showPage('developer-page');
-        document.getElementById('settings-drawer').classList.remove('active');
+        window.location.href = 'dev.html';
     });
 
     // Logout
@@ -275,6 +339,7 @@ function setupGeneralEvents() {
             document.getElementById('settings-drawer').classList.remove('active');
         }
     });
+
 }
 
 // Handle page visibility changes
