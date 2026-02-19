@@ -88,7 +88,7 @@
             <!-- Header / Navbar -->
             <header class="app-header" id="app-header">
                 <div class="header-left">
-                    <img src="todoo.png" alt="ToDoo" class="app-icon">
+                    <img src="todoo.png" alt="ToDoo" class="app-icon settings-toggle">
                     <h1 class="app-title">Just to-do</h1>
                 </div>
 
@@ -100,12 +100,7 @@
                 </nav>
 
                 <div class="header-actions">
-                    <div class="header-search-container">
-                        <input type="text" id="search-input" placeholder="Search for todoo..." class="header-search-input">
-                        <button class="search-clear-btn" id="search-clear-btn" style="display: none;">✕</button>
-                    </div>
                     <button class="primary-auth-btn" id="primary-auth-btn">Login / Sign up</button>
-                    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Open settings">☰</button>
                 </div>
             </header>
 
@@ -164,9 +159,6 @@
                     </article>
                 </div>
             </section>
-
-            <!-- Search Results -->
-            <div id="search-results" class="search-results hidden"></div>
 
             <!-- Notes Section (visible after login) -->
             <section id="notes-section" class="notes-section hidden">

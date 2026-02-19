@@ -87,18 +87,20 @@
             <!-- Header -->
             <header class="app-header" id="app-header">
                 <div class="header-left">
-                    <button class="menu-toggle" id="menu-toggle">☰</button>
-                    <img src="todoo.png" alt="ToDoo" class="app-icon">
+                    <img src="todoo.png" alt="ToDoo" class="app-icon settings-toggle">
                     <h1 class="app-title">Your todoos</h1>
                 </div>
-                <div class="header-search-container">
-                    <input type="text" id="search-input" placeholder="Search in your todoos..." class="header-search-input">
-                    <button class="search-clear-btn" id="search-clear-btn" style="display: none;">✕</button>
+                <div class="header-actions">
+                    <div class="header-search-container">
+                        <input
+                            type="text"
+                            id="todo-search-input"
+                            placeholder="Search todoos..."
+                            class="header-search-input"
+                        >
+                    </div>
                 </div>
             </header>
-
-            <!-- Search Results -->
-            <div id="search-results" class="search-results hidden"></div>
 
             <!-- Notes Container -->
             <section id="notes-section" class="notes-section">
@@ -110,7 +112,9 @@
                         </p>
                     </div>
                 </div>
+
                 <div id="notes-container" class="notes-container">
+                    <div id="notes-loading" class="notes-loading">Loading todoos…</div>
                     <div id="notes-list" class="notes-list"></div>
                     <div id="empty-state" class="empty-state hidden">
                         <p>Todooos empty</p>

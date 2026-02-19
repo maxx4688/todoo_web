@@ -497,12 +497,11 @@ body {
     left: 0;
     z-index: 1000;
     backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.72);
     border-bottom: 1px solid rgba(0, 0, 0, 0.03);
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.4s cubic-bezier(0.4, 0, 0.2, 1), all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     gap: 16px;
     width: 100%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 #home-page:has(.settings-panel.active) .app-header {
@@ -518,9 +517,8 @@ body {
 }
 
 [data-theme="dark"] .app-header {
-    background: rgba(24, 24, 24, 0.85);
+    background: rgba(24, 24, 24, 0.7);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .header-left {
@@ -635,6 +633,17 @@ body {
     
     .app-title {
         font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-search-container {
+        width: 140px;
+    }
+
+    .primary-auth-btn {
+        padding: 8px 12px;
+        font-size: 12px;
     }
 }
 
@@ -864,6 +873,11 @@ body {
 .notes-section-subtitle {
     font-size: 13px;
     color: var(--text-secondary);
+}
+
+.notes-search-row {
+    margin-top: 12px;
+    max-width: 360px;
 }
 
 /* Todoos highlight section on home */
@@ -1436,6 +1450,13 @@ body {
     padding: 24px 16px 120px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.notes-loading {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
 }
 
 .notes-list {

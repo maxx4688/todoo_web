@@ -12,6 +12,10 @@ const Notes = {
     loadNotes() {
         try{
             Loading.show();
+            const loadingText = document.getElementById('notes-loading');
+            if (loadingText) {
+                loadingText.classList.remove('hidden');
+            }
         const userId = Auth.getUserId();
         if (!userId) {
             console.error('No user ID available');
@@ -38,6 +42,10 @@ const Notes = {
                     });
                 });
                 this.renderNotes();
+                const loadingTextInner = document.getElementById('notes-loading');
+                if (loadingTextInner) {
+                    loadingTextInner.classList.add('hidden');
+                }
             }, (error) => {
                 console.error('Error loading notes:', error);
                 Toast.error('Failed to load notes');

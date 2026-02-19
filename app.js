@@ -68,8 +68,8 @@ function setupEventListeners() {
     // Creative Fields Events
     setupCreativeEvents();
     
-    // Search Events
-    setupSearchEvents();
+    // Todoos page search (if present)
+    setupTodoSearchEvents();
     
     // General Events
     setupGeneralEvents();
@@ -81,10 +81,12 @@ function setupAuthEvents() {
 }
 
 function setupHomeEvents() {
-    // Settings drawer toggle
-    document.getElementById('menu-toggle')?.addEventListener('click', () => {
-        const settingsPanel = document.getElementById('settings-drawer');
-        settingsPanel.classList.toggle('active');
+    // Settings drawer toggle - triggered by app icon
+    document.querySelectorAll('.settings-toggle').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const settingsPanel = document.getElementById('settings-drawer');
+            settingsPanel.classList.toggle('active');
+        });
     });
 
     // Primary auth buttons (header + hero)
@@ -265,49 +267,18 @@ function setupCreativeEvents() {
     });
 }
 
-function setupSearchEvents() {
-    const searchInput = document.getElementById('search-input');
-    const searchClearBtn = document.getElementById('search-clear-btn');
-    const searchResults = document.getElementById('search-results');
+function setupTodoSearchEvents() {
+    const searchInput = document.getElementById('todo-search-input');
+    if (!searchInput) return;
 
-    // Show/hide clear button based on input value
-    function updateClearButton() {
-        if (searchInput.value.trim().length > 0) {
-            searchClearBtn.style.display = 'flex';
-        } else {
-            searchClearBtn.style.display = 'none';
-        }
-    }
-
-    // Clear search
-    searchClearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        searchInput.focus();
-        updateClearButton();
-        Notes.renderNotes();
-        searchResults.classList.add('hidden');
-    });
-
-    // Search input
-    let searchTimeout;
     searchInput.addEventListener('input', (e) => {
-        updateClearButton();
-        clearTimeout(searchTimeout);
-        
         const query = e.target.value.trim();
-        if (query.length > 0) {
-            searchResults.classList.remove('hidden');
-            searchTimeout = setTimeout(() => {
-                Notes.searchNotes(query);
-            }, 300);
-        } else {
-            searchResults.classList.add('hidden');
+        if (!query) {
             Notes.renderNotes();
+        } else {
+            Notes.searchNotes(query);
         }
     });
-
-    // Initialize clear button state
-    updateClearButton();
 }
 
 function setupGeneralEvents() {
