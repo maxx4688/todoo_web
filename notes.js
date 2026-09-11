@@ -224,12 +224,14 @@ const Notes = {
             const noteCard = this.createNoteCard(note, index);
             container.appendChild(noteCard);
         });
+        this.revealCards();
     },
 
     createNoteCard(note, index) {
         const card = document.createElement('div');
-        card.className = 'note-card';
+        card.className = 'note-card reveal';
         card.dataset.noteId = note.id;
+        card.style.setProperty('--reveal-delay', `${Math.min(index, 10) * 55}ms`);
 
         const checklist = note.checklist || [];
         const checkedCount = checklist.filter(item => item.isChecked).length;
@@ -300,18 +302,25 @@ const Notes = {
 
         this.currentNoteId = noteId;
         PageManager.showPage('view-note-page');
+        const viewPage = document.getElementById('view-note-page');
+        viewPage.classList.remove('is-entering');
+        void viewPage.offsetWidth;
+        viewPage.classList.add('is-entering');
 
         // Populate view note page
         document.getElementById('view-note-title').textContent = note.noteTitle;
         
         const bodyContainer = document.getElementById('view-note-body');
+        bodyContainer.innerHTML = '';
         const urls = URLUtils.extractUrls(note.noteContent);
         const textWithoutUrls = URLUtils.getTextWithoutUrls(note.noteContent);
+
+        const copy = document.querySelector('#view-note-page .view-note-copy');
+        copy?.classList.toggle('is-long', (textWithoutUrls || '').length > 220);
 
         if (textWithoutUrls) {
             const textElement = document.createElement('div');
             textElement.textContent = textWithoutUrls;
-            bodyContainer.innerHTML = '';
             bodyContainer.appendChild(textElement);
         }
 
@@ -328,10 +337,7 @@ const Notes = {
         const checklistContainer = document.getElementById('view-note-checklist');
         if (note.checklist && note.checklist.length > 0) {
             checklistContainer.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                    <span>✓</span>
-                    <span style="font-weight: bold; color: var(--theme-color);">Checklist</span>
-                </div>
+                <div class="view-checklist-heading">Checklist</div>
             `;
             note.checklist.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
@@ -361,9 +367,12 @@ const Notes = {
 
         // Favorite button
         const favBtn = document.getElementById('view-note-favorite-btn');
-        favBtn.textContent = note.isFav ? '❤️' : '♡';
+        favBtn.classList.toggle('is-fav', Boolean(note.isFav));
+        favBtn.setAttribute('aria-pressed', String(Boolean(note.isFav)));
         favBtn.onclick = () => {
             this.toggleFavorite(noteId);
+            favBtn.classList.toggle('is-fav');
+            favBtn.setAttribute('aria-pressed', String(favBtn.classList.contains('is-fav')));
         };
 
         // Share button
@@ -379,6 +388,39 @@ const Notes = {
                 Toast.success('Note copied to clipboard!');
             }
         };
+
+        const creativeBtn = document.getElementById('view-note-creative-btn');
+        if (creativeBtn) {
+            creativeBtn.onclick = () => this.openInCreative(note);
+        }
+    },
+
+    openInCreative(note) {
+        const title = (note.noteTitle || '').trim();
+        let content = (note.noteContent || '').trim();
+        if (!content && note.checklist?.length) {
+            content = note.checklist.map((item) => item.text).filter(Boolean).join('\n');
+        }
+
+        const titleInput = document.getElementById('creative-title');
+        const contentInput = document.getElementById('creative-content');
+        if (titleInput) titleInput.value = title;
+        if (contentInput) contentInput.value = content;
+
+        window.creativeReturnPage = 'view-note-page';
+
+        if (!title || !content) {
+            Toast.error('Title and content are required');
+            PageManager.showPage('creative-fields-page');
+            return;
+        }
+
+        PageManager.showPage('creative-page');
+        const previewCard = document.getElementById('creative-card');
+        previewCard?.classList.remove('has-landed', 'is-peeking');
+        if (previewCard) void previewCard.offsetWidth;
+        document.getElementById('creative-card-title').textContent = title;
+        document.getElementById('creative-card-content').textContent = content;
     },
 
     editNote(noteId) {
@@ -511,6 +553,41 @@ const Notes = {
         filtered.forEach((note, index) => {
             const noteCard = this.createNoteCard(note, index);
             container.appendChild(noteCard);
+        });
+        this.revealCards();
+    },
+
+    ensureCardObserver() {
+        if (this._cardObserver || !('IntersectionObserver' in window)) return;
+        this._cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    this._cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    },
+
+    revealCards() {
+        const cards = document.querySelectorAll('#notes-list .note-card.reveal:not(.is-visible)');
+        if (!cards.length) return;
+
+        if (!('IntersectionObserver' in window)) {
+            cards.forEach((card) => card.classList.add('is-visible'));
+            return;
+        }
+
+        this.ensureCardObserver();
+        requestAnimationFrame(() => {
+            cards.forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.94) {
+                    card.classList.add('is-visible');
+                } else {
+                    this._cardObserver.observe(card);
+                }
+            });
         });
     },
 

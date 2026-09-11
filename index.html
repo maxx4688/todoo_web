@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoo - An extraordinary note</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="marketing.css">
     <link rel="icon" href="todoo.png?v=2" type="image/png">
-
 </head>
-<body>
+<body class="landing">
     <!-- Home Page -->
     <div id="home-page" class="page active">
         <!-- Settings Side Panel -->
@@ -92,29 +92,35 @@
                     <h1 class="app-title">Just to-do</h1>
                 </div>
 
-                <nav class="main-nav">
+                <nav class="main-nav" id="main-nav">
                     <button class="nav-link active" data-nav="home">Home</button>
+                    <button class="nav-link" data-nav="suggestions">Features</button>
+                    <button class="nav-link" data-nav="app">App</button>
                     <button class="nav-link" data-nav="todoos">Todoos</button>
                     <button class="nav-link" data-nav="developer">Developer</button>
-                    <button class="nav-link" data-nav="suggestions">Suggestions</button>
                 </nav>
 
                 <div class="header-actions">
                     <button class="primary-auth-btn" id="primary-auth-btn">Login / Sign up</button>
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
             </header>
 
             <!-- Hero / Introduction Section -->
             <section class="hero-section" id="home-hero">
                 <div class="hero-text">
-                    <p class="hero-eyebrow">Discover your calm workspace</p>
-                    <h2>Fuel your <span class="theme-color">focus</span> with a smarter ToDoo.</h2>
+                    <p class="hero-eyebrow">A calmer workspace</p>
+                    <h2>Fuel your<br><span class="theme-color">focus.</span></h2>
                     <p class="hero-subtitle">
-                        ToDoo turns scattered thoughts into clear, beautiful notes and todoos.
-                        Capture ideas, plan your day, and return to what matters in seconds.
+                        ToDoo turns scattered thoughts into clear notes and todoos.
+                        Capture ideas, plan your day, and return to what matters.
                     </p>
                     <div class="hero-actions">
-                        <span class="hero-secondary-text">No clutter, just clean productivity.</span>
+                        <button class="primary-auth-btn large" id="hero-cta-btn">Start writing</button>
+                        <a class="ghost-btn" href="#suggestions-section">See the product</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
@@ -123,7 +129,7 @@
                         </div>
                         <div class="stat-item">
                             <span class="stat-value">4.8</span>
-                            <span class="stat-label">Average satisfaction</span>
+                            <span class="stat-label">Satisfaction</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-value">24/7</span>
@@ -132,30 +138,89 @@
                     </div>
                 </div>
                 <div class="hero-media">
-                    <div class="hero-card">
-                        <img src="assets/card.png" alt="todoo preview" class="hero-image">
-                    </div>
+                    <div class="hero-glow" aria-hidden="true"></div>
+                    <figure class="hero-shot">
+                        <img src="assets/todoo_header.png" alt="ToDoo app preview" class="hero-image">
+                    </figure>
                 </div>
             </section>
 
-            <!-- Suggestions / Why ToDoo Section -->
+            <!-- Marquee -->
+            <div class="marquee" aria-hidden="true">
+                <div class="marquee-track">
+                    <span>No clutter</span><span>Just clean productivity</span><span>Capture</span><span>Plan</span><span>Return</span>
+                    <span>No clutter</span><span>Just clean productivity</span><span>Capture</span><span>Plan</span><span>Return</span>
+                </div>
+            </div>
+
+            <!-- Features / Why ToDoo -->
             <section id="suggestions-section" class="info-section suggestions-section">
-                <h3>Why teams love <span class="theme-color">ToDoo</span></h3>
-                <p class="info-subtitle">
-                    Built for makers, developers, and busy humans who need a calm space to think.
-                </p>
-                <div class="info-grid">
-                    <article class="info-card">
-                        <h4>Capture in seconds</h4>
-                        <p>Create todoos, rich notes, and checklists with a single tap, so ideas never slip away.</p>
+                <div class="section-intro reveal">
+                    <p class="hero-eyebrow">Why ToDoo</p>
+                    <h3>A workspace that stays<br><span class="theme-color">out of the way.</span></h3>
+                    <p class="info-subtitle">
+                        Built for makers, developers, and busy humans who need a calm space to think.
+                    </p>
+                </div>
+                <div class="feature-board">
+                    <article class="feature-card reveal">
+                        <span class="feature-index">01</span>
+                        <div class="feature-copy">
+                            <h4>Capture in seconds</h4>
+                            <p>Create todoos, rich notes, and checklists with a single tap, so ideas never slip away.</p>
+                        </div>
                     </article>
-                    <article class="info-card">
-                        <h4>Stay beautifully organized</h4>
-                        <p>Powerful search, favorites, and creative fields keep your workspace clean and inspiring.</p>
+                    <article class="feature-card reveal">
+                        <span class="feature-index">02</span>
+                        <div class="feature-copy">
+                            <h4>Stay beautifully organized</h4>
+                            <p>Powerful search, favorites, and creative fields keep your workspace clean and inspiring.</p>
+                        </div>
                     </article>
-                    <article class="info-card">
-                        <h4>Share and remember</h4>
-                        <p>Turn quick ideas into polished, sharable notes that your future self will thank you for.</p>
+                    <article class="feature-card reveal">
+                        <span class="feature-index">03</span>
+                        <div class="feature-copy">
+                            <h4>Share and remember</h4>
+                            <p>Turn quick ideas into polished, sharable notes that your future self will thank you for.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Product tiles -->
+            <section class="product-strip" id="product-strip">
+                <div class="section-intro reveal">
+                    <p class="hero-eyebrow">Inside the app</p>
+                    <h3>Everything you need.<br>Nothing you don’t.</h3>
+                </div>
+                <div class="product-grid">
+                    <article class="product-tile product-tile-lead reveal">
+                        <div class="tile-visual tile-notes" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <h4>Notes</h4>
+                        <p>Long-form thinking with a quiet, readable canvas.</p>
+                    </article>
+                    <article class="product-tile reveal">
+                        <div class="tile-visual tile-checks" aria-hidden="true">
+                            <span>✓</span><span></span><span>✓</span>
+                        </div>
+                        <h4>Checklists</h4>
+                        <p>Tick through the day without losing the bigger picture.</p>
+                    </article>
+                    <article class="product-tile reveal">
+                        <div class="tile-visual tile-search" aria-hidden="true">
+                            <span></span>
+                        </div>
+                        <h4>Search</h4>
+                        <p>Find any thought instantly, even weeks later.</p>
+                    </article>
+                    <article class="product-tile reveal">
+                        <div class="tile-visual tile-star" aria-hidden="true">
+                            <span></span>
+                        </div>
+                        <h4>Favorites</h4>
+                        <p>Pin the notes you return to again and again.</p>
                     </article>
                 </div>
             </section>
@@ -180,12 +245,12 @@
 
             <!-- Todoos highlight section (visible when logged in) -->
             <section id="todoos-entry-section" class="todoos-highlight-section hidden">
-                <div class="todoos-highlight-inner" onclick="window.location.href='todoos.html'">
+                <a href="todoos.html" class="todoos-highlight-inner" id="todoos-entry-link">
                     <div class="todoos-highlight-text">
-                        <p class="hero-eyebrow">Your focused workspace</p>
+                        <p class="hero-eyebrow">Your notes list</p>
                         <h3>Open the <span class="theme-color">Todoos</span> board.</h3>
                         <p class="todoos-highlight-subtitle">
-                            Switch from browsing to doing. In the todoos view you can create rich notes, manage checklists,
+                            Switch from browsing to doing. Create rich notes, manage checklists,
                             star your favorites, and search across everything instantly.
                         </p>
                         <ul class="todoos-feature-list">
@@ -194,8 +259,14 @@
                             <li>Checklists, links, and favorites for important work</li>
                             <li>Creative view for turning ideas into polished cards</li>
                         </ul>
+                        <span class="todoos-entry-btn">
+                            Open notes list
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M5 12h14M13 6l6 6-6 6" />
+                            </svg>
+                        </span>
                     </div>
-                    <div class="todoos-highlight-visual">
+                    <div class="todoos-highlight-visual" aria-hidden="true">
                         <div class="todoos-pill-row">
                             <span class="todoos-pill">Today</span>
                             <span class="todoos-pill">Ideas</span>
@@ -215,42 +286,76 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </section>
 
             <!-- Android App Feature Section -->
-            <section id="android-section" class="android-section">
-                <div class="android-image-wrapper">
-                    <img src="assets/todoo_light.jpeg" alt="ToDoo Android preview light" class="android-bg android-bg-light">
-                    <img src="assets/todoo_dark.jpeg" alt="ToDoo Android preview dark" class="android-bg android-bg-dark">
+            <section id="android-section" class="android-section android-ad">
+                <video
+                    id="android-ad-video"
+                    class="android-ad-video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    poster="assets/todoo_dark.jpeg"
+                >
+                    <source src="assets/todoo_ad.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <button type="button" class="android-mute-btn is-muted" id="android-mute-btn" aria-label="Unmute video">
+                    <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 10v4h4l5 4V6L8 10H4z" />
+                        <path d="M16 9.5l5 5M21 9.5l-5 5" />
+                    </svg>
+                    <svg class="icon-unmuted" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 10v4h4l5 4V6L8 10H4z" />
+                        <path d="M16.5 8.5a5 5 0 0 1 0 7M18.5 6.5a8 8 0 0 1 0 11" />
+                    </svg>
+                </button>
+            </section>
 
-                    <div class="android-overlay">
-                        <p class="hero-eyebrow">ToDoo for Android</p>
-                        <h3>Carry your <span class="theme-color">todoos</span> in your pocket.</h3>
+            <section class="close-cta">
+                <div class="close-cta-inner reveal">
+                    <p class="hero-eyebrow">Ready when you are</p>
+                    <h3>Start with one<br><span class="theme-color">quiet note.</span></h3>
+                    <button type="button" class="primary-auth-btn large" id="close-cta-btn">Start writing</button>
+                </div>
+            </section>
 
-                        <div class="android-extra">
-                            <p class="android-subtitle">
-                                Capture ideas the moment they appear and keep your day on track with a clean, focused
-                                mobile experience that stays in sync with the web app.
-                            </p>
-                            <ul class="android-feature-list">
-                                <li>Beautiful, thumb-friendly layout for quick adding and checking.</li>
-                                <li>Offline-friendly drafts that sync when you come back online.</li>
-                                <li>Fast search across notes and todoos from your phone.</li>
-                            </ul>
-                            <div class="android-badge-row">
-                                <div class="android-badge coming-soon-badge">
-                                    <span class="badge-chip">Coming soon</span>
-                                    <div class="badge-text">
-                                        <span class="badge-title">ToDoo Android app</span>
-                                        <span class="badge-subtitle">Built with the same calm design</span>
-                                    </div>
-                                </div>
-                            </div>
+            <footer class="site-footer">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <span class="footer-mark" aria-hidden="true">ToDoo</span>
+                        <p class="hero-eyebrow">The maker</p>
+                        <h3>Designed with a quiet obsession for clarity.</h3>
+                        <p>
+                            ToDoo is built by Ashish — notes, apps, and the small details that make a workspace feel calm.
+                        </p>
+                        <a class="ghost-btn" href="dev.html">Meet the developer</a>
+                    </div>
+                    <div class="footer-links">
+                        <div>
+                            <span>Explore</span>
+                            <a href="#home-hero">Home</a>
+                            <a href="#suggestions-section">Features</a>
+                            <a href="#android-section">Android</a>
+                            <a href="todoos.html" id="footer-todoos-link">Todoos</a>
+                        </div>
+                        <div>
+                            <span>Connect</span>
+                            <a href="dev.html">Developer</a>
+                            <a href="mailto:alexmaxx8055@gmail.com">Email</a>
+                            <a href="https://github.com/maxx4688" target="_blank" rel="noopener noreferrer">GitHub</a>
                         </div>
                     </div>
                 </div>
-            </section>
+                <div class="footer-bottom">
+                    <span>ToDoo</span>
+                    <span>© <span id="footer-year">2026</span> — All rights reserved.</span>
+                </div>
+            </footer>
 
             <!-- Floating Action Buttons (shown only when logged in) -->
             <div class="fab-container hidden" id="fab-container">
@@ -267,33 +372,65 @@
 
     <!-- Creative Fields Page -->
     <div id="creative-fields-page" class="page">
-        <header class="page-header">
-            <button class="back-button" data-back="home">←</button>
-            <h2 class="theme-color">Creative Fields</h2>
-            <button class="creative-save-btn" id="creative-save-btn">💾</button>
-        </header>
-        <div class="creative-form">
-            <input type="text" id="creative-title" placeholder="A creative title." class="form-input">
-            <textarea id="creative-content" placeholder="A detailed creative content," class="form-textarea"></textarea>
+        <div class="creative-shell">
+            <header class="page-header creative-toolbar">
+                <button class="back-button" data-back="home" aria-label="Back to workspace">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 5l-7 7 7 7" />
+                    </svg>
+                </button>
+                <div class="creative-toolbar-copy">
+                    <p class="hero-eyebrow">Creative field</p>
+                    <h2>Write freely.</h2>
+                </div>
+                <button type="button" class="creative-save-btn" id="creative-save-btn">Preview</button>
+            </header>
+            <div class="creative-form">
+                <input type="text" id="creative-title" placeholder="A quiet title" class="form-input creative-title-input" autocomplete="off">
+                <textarea id="creative-content" placeholder="Let the thought unfold…" class="form-textarea creative-body-input"></textarea>
+            </div>
         </div>
     </div>
 
     <!-- Creative Page (View) -->
     <div id="creative-page" class="page">
         <div class="creative-card-container">
-            <div class="creative-card" id="creative-card">
+            <div class="creative-card" id="creative-card" data-format="quote">
+                <span class="creative-card-mark" aria-hidden="true">“</span>
                 <div class="creative-card-content">
-                    <div class="creative-quote">"</div>
                     <h3 id="creative-card-title">...</h3>
                     <p id="creative-card-content">No content</p>
-                    <div class="creative-footer">
-                        <span>Created by</span>
-                        <span class="theme-color"> Todoo</span>
-                    </div>
+                </div>
+                <div class="creative-footer">
+                    <span>A quiet note</span>
+                    <span class="creative-sign">ToDoo</span>
                 </div>
             </div>
-            <button class="save-card-btn" id="save-card-btn">Save to Gallery</button>
+            <button class="save-card-btn" id="save-card-btn" type="button" aria-label="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+                close
+            </button>
         </div>
+        <aside class="creative-format-rail" role="radiogroup" aria-label="Card formats" aria-expanded="false">
+            <button type="button" class="creative-format-chip is-active" data-format="quote" aria-pressed="true" aria-label="Quote format">
+                <span class="chip-face chip-quote" aria-hidden="true"></span>
+                <span class="chip-name">Quote</span>
+            </button>
+            <button type="button" class="creative-format-chip" data-format="journal" aria-pressed="false" aria-label="Journal format">
+                <span class="chip-face chip-journal" aria-hidden="true"></span>
+                <span class="chip-name">Journal</span>
+            </button>
+            <button type="button" class="creative-format-chip" data-format="noir" aria-pressed="false" aria-label="Noir format">
+                <span class="chip-face chip-noir" aria-hidden="true"></span>
+                <span class="chip-name">Noir</span>
+            </button>
+            <button type="button" class="creative-format-chip" data-format="frame" aria-pressed="false" aria-label="Frame format">
+                <span class="chip-face chip-frame" aria-hidden="true"></span>
+                <span class="chip-name">Frame</span>
+            </button>
+        </aside>
     </div>
 
     <!-- Add/Edit Note Modal -->
@@ -329,18 +466,36 @@
 
     <!-- View Note Page -->
     <div id="view-note-page" class="page">
-        <header class="page-header">
-            <button class="back-button" data-back="home">✕</button>
-            <div class="header-actions">
-                <button class="header-action-btn" id="view-note-favorite-btn">♡</button>
-                <button class="header-action-btn" id="view-note-share-btn">↗</button>
-            </div>
-        </header>
-        <div class="view-note-content">
-            <h1 class="view-note-title theme-color" id="view-note-title"></h1>
-            <div class="view-note-body" id="view-note-body"></div>
-            <div id="view-note-checklist" class="view-note-checklist"></div>
-            <div class="view-note-timestamps" id="view-note-timestamps"></div>
+        <div class="view-note-shell">
+            <header class="view-note-toolbar">
+                <button class="back-button" data-back="home" aria-label="Close">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" />
+                    </svg>
+                </button>
+                <button type="button" class="view-note-creative-btn" id="view-note-creative-btn">Open in creative</button>
+                <div class="header-actions">
+                    <button class="header-action-btn" id="view-note-favorite-btn" aria-label="Favorite" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z" />
+                        </svg>
+                    </button>
+                    <button class="header-action-btn" id="view-note-share-btn" aria-label="Share">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 17L17 7M9 7h8v8" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+            <article class="view-note-stage">
+                <div class="view-note-copy">
+                    <p class="hero-eyebrow">A todoo</p>
+                    <h1 class="view-note-title" id="view-note-title"></h1>
+                    <div class="view-note-body" id="view-note-body"></div>
+                    <div id="view-note-checklist" class="view-note-checklist"></div>
+                    <div class="view-note-timestamps" id="view-note-timestamps"></div>
+                </div>
+            </article>
         </div>
     </div>
 

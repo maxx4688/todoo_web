@@ -1,6 +1,8 @@
 // Main Application Logic
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.documentElement.classList.add('js');
+
     // Initialize theme and auth
     ThemeManager.init();
     Auth.init();
@@ -35,15 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
             notesSection?.classList.add('hidden');
             fabContainer?.classList.add('hidden');
 
+            const heroCta = document.getElementById('hero-cta-btn');
+            const compactHeader = window.matchMedia('(max-width: 720px)').matches;
+
             if (isLoggedIn) {
                 todoosEntry?.classList.remove('hidden');
                 if (primaryAuthBtn) {
-                    primaryAuthBtn.textContent = 'Go to your todoos';
+                    primaryAuthBtn.textContent = compactHeader ? 'Workspace' : 'Open workspace';
+                }
+                if (heroCta) {
+                    heroCta.textContent = 'Open workspace';
                 }
             } else {
                 todoosEntry?.classList.add('hidden');
                 if (primaryAuthBtn) {
-                    primaryAuthBtn.textContent = 'Login / Sign up';
+                    primaryAuthBtn.textContent = compactHeader ? 'Log in' : 'Login / Sign up';
+                }
+                if (heroCta) {
+                    heroCta.textContent = 'Start writing';
                 }
             }
         }
@@ -81,6 +92,27 @@ function setupAuthEvents() {
 }
 
 function setupHomeEvents() {
+    const isLanding = document.body.classList.contains('landing');
+    const isWorkspace = document.body.classList.contains('workspace');
+    const isAppChrome = isLanding || isWorkspace;
+
+    const setAuthButtonLabel = () => {
+        const primaryAuthBtn = document.getElementById('primary-auth-btn');
+        if (!primaryAuthBtn || !isLanding) return;
+        const compactHeader = window.matchMedia('(max-width: 720px)').matches;
+        const loggedIn = typeof Auth !== 'undefined' && Auth.isAuthenticated();
+        if (loggedIn) {
+            primaryAuthBtn.textContent = compactHeader ? 'Workspace' : 'Open workspace';
+        } else {
+            primaryAuthBtn.textContent = compactHeader ? 'Log in' : 'Login / Sign up';
+        }
+    };
+
+    setAuthButtonLabel();
+    if (isLanding) {
+        window.addEventListener('resize', setAuthButtonLabel);
+    }
+
     // Settings drawer toggle - triggered by app icon
     document.querySelectorAll('.settings-toggle').forEach(icon => {
         icon.addEventListener('click', () => {
@@ -100,6 +132,31 @@ function setupHomeEvents() {
 
     document.getElementById('primary-auth-btn')?.addEventListener('click', handleAuthCta);
     document.getElementById('hero-cta-btn')?.addEventListener('click', handleAuthCta);
+    document.getElementById('close-cta-btn')?.addEventListener('click', handleAuthCta);
+
+    const header = document.getElementById('app-header');
+    const navToggle = document.getElementById('nav-toggle');
+    const closeMobileNav = () => {
+        header?.classList.remove('nav-open');
+        navToggle?.setAttribute('aria-expanded', 'false');
+        navToggle?.setAttribute('aria-label', 'Open menu');
+    };
+
+    navToggle?.addEventListener('click', () => {
+        const isOpen = header?.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    });
+
+    const setHeaderElevation = () => {
+        if (!header || !isAppChrome) return;
+        header.classList.toggle('is-elevated', window.scrollY > 16);
+    };
+
+    if (isAppChrome) {
+        setHeaderElevation();
+        window.addEventListener('scroll', setHeaderElevation, { passive: true });
+    }
 
     // Navbar navigation
     document.querySelectorAll('.nav-link').forEach(btn => {
@@ -109,6 +166,7 @@ function setupHomeEvents() {
             // Update active state for all nav buttons
             document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            closeMobileNav();
 
             if (target === 'home') {
                 document.getElementById('home-hero')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -122,9 +180,40 @@ function setupHomeEvents() {
                 window.location.href = 'dev.html';
             } else if (target === 'suggestions') {
                 document.getElementById('suggestions-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (target === 'app') {
+                document.getElementById('android-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
+
+    const footerYear = document.getElementById('footer-year');
+    if (footerYear) {
+        footerYear.textContent = String(new Date().getFullYear());
+    }
+
+    setupAndroidAd();
+
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.92) {
+                el.classList.add('is-visible');
+            } else {
+                revealObserver.observe(el);
+            }
+        });
+    } else {
+        document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+    }
 
     // Add note FAB
     document.getElementById('add-fab')?.addEventListener('click', () => {
@@ -136,6 +225,55 @@ function setupHomeEvents() {
     document.getElementById('creative-fab')?.addEventListener('click', () => {
         PageManager.showPage('creative-fields-page');
     });
+}
+
+function setupAndroidAd() {
+    const video = document.getElementById('android-ad-video');
+    const muteBtn = document.getElementById('android-mute-btn');
+    if (!video || !muteBtn) return;
+
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+
+    const syncMuteUi = () => {
+        muteBtn.classList.toggle('is-muted', video.muted);
+        muteBtn.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
+    };
+
+    const tryPlay = () => {
+        const play = video.play();
+        if (play && typeof play.catch === 'function') {
+            play.catch(() => {});
+        }
+    };
+
+    muteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        video.muted = !video.muted;
+        syncMuteUi();
+        tryPlay();
+    });
+
+    syncMuteUi();
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        video.pause();
+        return;
+    }
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) tryPlay();
+                else video.pause();
+            });
+        }, { threshold: 0.2 });
+        observer.observe(video);
+    } else {
+        tryPlay();
+    }
 }
 
 function setupNoteModalEvents() {
@@ -254,16 +392,139 @@ function setupCreativeEvents() {
         }
 
         // Show creative page
+        window.creativeReturnPage = 'creative-fields-page';
         PageManager.showPage('creative-page');
+        const previewCard = document.getElementById('creative-card');
+        previewCard?.classList.remove('has-landed', 'is-peeking');
+        if (previewCard) void previewCard.offsetWidth;
         document.getElementById('creative-card-title').textContent = title;
         document.getElementById('creative-card-content').textContent = content;
     });
 
-    // Save card as image (simplified - just download as text for now)
-    document.getElementById('save-card-btn').addEventListener('click', () => {
-        // In a real implementation, you would use html2canvas or similar
-        // For now, we'll just show a message
-        Toast.success('Creative card feature - Use browser screenshot or print to save');
+    document.getElementById('save-card-btn')?.addEventListener('click', () => {
+        PageManager.showPage(window.creativeReturnPage || 'creative-fields-page');
+    });
+
+    setupCreativeFormats();
+}
+
+function setupCreativeFormats() {
+    const card = document.getElementById('creative-card');
+    const page = document.getElementById('creative-page');
+    const rail = document.querySelector('.creative-format-rail');
+    const chips = document.querySelectorAll('.creative-format-chip');
+    if (!card || !rail || !chips.length) return;
+
+    const formats = new Set(['quote', 'journal', 'noir', 'frame']);
+    const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let approved = 'quote';
+    let open = false;
+    let collapseTimer = 0;
+
+    const paintFormat = (format, { peek = false } = {}) => {
+        if (!formats.has(format)) format = 'quote';
+        card.dataset.format = format;
+        if (page) page.dataset.format = format;
+        if (!peek || reduceMotion()) {
+            card.classList.remove('is-peeking');
+            return;
+        }
+        card.classList.remove('is-peeking');
+        void card.offsetWidth;
+        card.classList.add('is-peeking');
+    };
+
+    const markApproved = () => {
+        chips.forEach((chip) => {
+            const on = chip.dataset.format === approved;
+            chip.classList.toggle('is-active', on);
+            chip.setAttribute('aria-pressed', String(on));
+        });
+    };
+
+    const persist = (format) => {
+        approved = format;
+        try {
+            localStorage.setItem('todoo-creative-format', format);
+        } catch (err) {
+            /* ignore quota / private mode */
+        }
+        markApproved();
+    };
+
+    const setOpen = (next) => {
+        if (open === next) return;
+        open = next;
+        rail.classList.toggle('is-open', next);
+        rail.setAttribute('aria-expanded', String(next));
+        if (!next) {
+            chips.forEach((chip) => chip.classList.remove('is-previewing'));
+            paintFormat(approved);
+        }
+    };
+
+    try {
+        approved = localStorage.getItem('todoo-creative-format') || 'quote';
+    } catch (err) {
+        approved = 'quote';
+    }
+    if (!formats.has(approved)) approved = 'quote';
+    paintFormat(approved);
+    markApproved();
+
+    card.addEventListener('animationend', (e) => {
+        if (e.animationName === 'card-in') {
+            card.classList.add('has-landed');
+        }
+        if (e.animationName === 'format-peek') {
+            card.classList.remove('is-peeking');
+        }
+    });
+
+    const scheduleCollapse = (delay = 240) => {
+        clearTimeout(collapseTimer);
+        collapseTimer = window.setTimeout(() => setOpen(false), delay);
+    };
+
+    const cancelCollapse = () => {
+        clearTimeout(collapseTimer);
+        setOpen(true);
+    };
+
+    rail.addEventListener('pointerenter', cancelCollapse);
+    rail.addEventListener('pointerleave', () => {
+        chips.forEach((chip) => chip.classList.remove('is-previewing'));
+        paintFormat(approved);
+        scheduleCollapse();
+    });
+
+    chips.forEach((chip) => {
+        chip.addEventListener('pointerenter', (e) => {
+            if (!open || e.pointerType === 'touch') return;
+            chips.forEach((other) => other.classList.toggle('is-previewing', other === chip));
+            paintFormat(chip.dataset.format, { peek: true });
+        });
+
+        chip.addEventListener('focus', () => {
+            cancelCollapse();
+            chips.forEach((other) => other.classList.toggle('is-previewing', other === chip));
+            paintFormat(chip.dataset.format, { peek: true });
+        });
+
+        chip.addEventListener('click', () => {
+            const format = chip.dataset.format;
+            if (!open) {
+                cancelCollapse();
+                chips.forEach((other) => other.classList.toggle('is-previewing', other === chip));
+                paintFormat(format, { peek: true });
+                return;
+            }
+            persist(format);
+            paintFormat(format, { peek: true });
+            chip.classList.add('is-picked');
+            window.setTimeout(() => chip.classList.remove('is-picked'), 480);
+        });
     });
 }
 

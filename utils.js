@@ -239,9 +239,9 @@ const PageManager = {
             if (creativePage) creativePage.style.display = 'none';
         }
         // Show creative page only when on creative-page itself
-        else if (pageId === 'creative-page') {
+        else if (pageId === 'creative-page' || pageId === 'creative-fields-page') {
             if (fabContainer) fabContainer.style.display = 'none';
-            if (creativePage) creativePage.style.display = '';
+            if (creativePage) creativePage.style.display = pageId === 'creative-page' ? '' : 'none';
         }
         // Default: show FAB buttons, hide creative page
         else {
