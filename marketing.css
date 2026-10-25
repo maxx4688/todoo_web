@@ -1388,8 +1388,12 @@ body.glass-mode.workspace .app-header.is-elevated {
 }
 
 .workspace .notes-list.grid-view {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
+    columns: 280px;
+    column-gap: 14px;
+}
+
+.workspace .notes-list.grid-view .note-card {
+    margin-bottom: 14px;
 }
 
 .workspace .note-card {
@@ -2908,5 +2912,100 @@ html.js .workspace .note-card.reveal.is-visible:hover {
     .view-note-copy {
         padding: 8px 0 48px;
         max-width: none;
+    }
+}
+
+/* ---------- Note card hover ---------- */
+.workspace .note-card {
+    --mx: 50%;
+    --my: 50%;
+}
+
+/* Cursor-following spotlight */
+.workspace .note-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(
+        320px circle at var(--mx) var(--my),
+        color-mix(in srgb, var(--theme-color) 16%, transparent),
+        transparent 70%
+    );
+}
+
+.workspace .note-card:hover::after {
+    opacity: 1;
+}
+
+/* Accent bar that sweeps across the top edge */
+.workspace .note-card::before {
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--theme-color), color-mix(in srgb, var(--theme-color) 20%, transparent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workspace .note-card:hover::before {
+    transform: scaleX(1);
+}
+
+.workspace .note-card .note-title {
+    transition: color 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workspace .note-card:hover .note-title {
+    color: var(--theme-color);
+    transform: translateX(3px);
+}
+
+.workspace .note-card:hover .note-avatar {
+    transform: rotate(-8deg) scale(1.12);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--theme-color) 45%, transparent);
+}
+
+/* Reveal finished: no stagger delay, snappy hover */
+html.js .workspace .note-card.reveal.is-visible.is-settled {
+    transition:
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.3s ease,
+        border-color 0.3s ease,
+        background 0.3s ease;
+    transition-delay: 0ms;
+}
+
+html.js .workspace .note-card.reveal.is-visible.is-settled:hover {
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--theme-color) 55%, var(--landing-line));
+    box-shadow:
+        0 22px 44px -14px color-mix(in srgb, var(--theme-color) 38%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--theme-color) 25%, transparent);
+}
+
+html.js .workspace .note-card.reveal.is-visible.is-settled:active {
+    transform: translateY(-2px) scale(0.985);
+    transition-duration: 0.1s;
+}
+
+@media (hover: none) {
+    .workspace .note-card::after {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .workspace .note-card,
+    .workspace .note-card::before,
+    .workspace .note-card .note-title,
+    .workspace .note-card .note-avatar {
+        transition: none !important;
+        transform: none !important;
     }
 }

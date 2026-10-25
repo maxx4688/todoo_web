@@ -235,15 +235,15 @@ const Notes = {
 
         const checklist = note.checklist || [];
         const checkedCount = checklist.filter(item => item.isChecked).length;
-        const urls = URLUtils.extractUrls(note.noteContent);
-        const textWithoutUrls = URLUtils.getTextWithoutUrls(note.noteContent);
+        const urls = Markdown.extractBareUrls(note.noteContent);
+        const textWithoutUrls = Markdown.stripBareUrls(note.noteContent);
 
         card.innerHTML = `
             <div class="note-header">
                 <div class="note-avatar">${index + 1}</div>
-                <div class="note-title">${this.escapeHtml(note.noteTitle)}</div>
+                <div class="note-title">${Markdown.renderInline(note.noteTitle)}</div>
             </div>
-            ${textWithoutUrls ? `<div class="note-content-preview">${this.escapeHtml(textWithoutUrls)}</div>` : ''}
+            ${textWithoutUrls ? `<div class="note-content-preview markdown-body">${Markdown.render(textWithoutUrls)}</div>` : ''}
             ${checklist.length > 0 ? `
                 <div class="note-checklist-preview">
                     <span>✓</span>
@@ -271,9 +271,23 @@ const Notes = {
             });
         }
 
+        // Hover: spotlight follows the cursor
+        card.addEventListener('pointermove', (e) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+
+        // Once the staggered reveal has finished, drop its delay so hover reacts instantly
+        card.addEventListener('transitionend', (e) => {
+            if (e.target === card && e.propertyName === 'opacity') {
+                card.classList.add('is-settled');
+            }
+        });
+
         // Event listeners
         card.addEventListener('click', (e) => {
-            if (!e.target.closest('button')) {
+            if (!e.target.closest('button, a')) {
                 this.viewNote(note.id);
             }
         });
@@ -308,19 +322,20 @@ const Notes = {
         viewPage.classList.add('is-entering');
 
         // Populate view note page
-        document.getElementById('view-note-title').textContent = note.noteTitle;
-        
+        document.getElementById('view-note-title').innerHTML = Markdown.renderInline(note.noteTitle);
+
         const bodyContainer = document.getElementById('view-note-body');
         bodyContainer.innerHTML = '';
-        const urls = URLUtils.extractUrls(note.noteContent);
-        const textWithoutUrls = URLUtils.getTextWithoutUrls(note.noteContent);
+        const urls = Markdown.extractBareUrls(note.noteContent);
+        const textWithoutUrls = Markdown.stripBareUrls(note.noteContent);
 
         const copy = document.querySelector('#view-note-page .view-note-copy');
         copy?.classList.toggle('is-long', (textWithoutUrls || '').length > 220);
 
         if (textWithoutUrls) {
             const textElement = document.createElement('div');
-            textElement.textContent = textWithoutUrls;
+            textElement.className = 'markdown-body';
+            textElement.innerHTML = Markdown.render(textWithoutUrls);
             bodyContainer.appendChild(textElement);
         }
 

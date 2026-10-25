@@ -5,81 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer - ToDoo</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dev.css">
     <link rel="icon" href="todoo.png?v=2" type="image/png">
+    <script>document.documentElement.classList.add('js');</script>
 </head>
-<body>
-    <div id="developer-page" class="page active">
-        <header class="page-header">
-            <button class="back-button" onclick="window.location.href='index.html'">←</button>
-            <h2 class="theme-color">Developer</h2>
-            <div style="width: 44px;"></div>
-        </header>
-        <div class="developer-content">
-            <div class="developer-card">
-                <div class="developer-avatar">
-                    <span>👨‍💻</span>
-                </div>
-                <h3 class="developer-name">Ashish</h3>
-                <p class="developer-role">Full Stack Developer</p>
-                
-                <p class="developer-intro">
-                    I&apos;m building ToDoo as a calm, fast space for organizing ideas. When I&apos;m not coding, I&apos;m usually sketching new interfaces and polishing the little details so everything feels effortless.
-                </p>
+<body class="dev">
+    <div class="dev-aurora" aria-hidden="true">
+        <div class="dev-blob dev-blob--a"></div>
+        <div class="dev-blob dev-blob--b"></div>
+        <div class="dev-blob dev-blob--c"></div>
+    </div>
+    <div class="dev-glow" aria-hidden="true"></div>
+    <div class="dev-grain" aria-hidden="true"></div>
 
-                <div class="developer-info">
-                    <div class="info-item">
-                        <span class="info-icon">📧</span>
-                        <div class="info-content">
-                            <span class="info-label">Email</span>
-                            <span class="info-value">alexmaxx8055@gmail.com</span>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-icon">👨‍💻</span>
-                        <div class="info-content">
-                            <span class="info-label">GitHub</span>
-                            <a href="https://github.com/maxx4688" class="info-value theme-color-link">GitHub Profile</a>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-icon">💼</span>
-                        <div class="info-content">
-                            <span class="info-label">ToDoo</span>
-                            <span class="info-value">Crafted for clean, everyday productivity</span>
-                        </div>
-                    </div>
-                </div>
+    <nav class="dev-nav" aria-label="Developer page">
+        <a href="index.html" class="dev-back" id="dev-back">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+            Back
+        </a>
+        <button type="button" class="dev-theme" id="dev-theme" aria-label="Toggle dark mode">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z" /></svg>
+        </button>
+    </nav>
 
-                <div class="developer-skills">
-                    <h4 class="skills-title">Tech stack</h4>
-                    <div class="skills-tags">
-                        <span class="skill-tag">HTML</span>
-                        <span class="skill-tag">CSS</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">Firebase</span>
-                        <span class="skill-tag">Flutter</span>
-                        <span class="skill-tag">Python</span>
-                    </div>
-                </div>
+    <main>
+        <section class="dev-hero">
+            <p class="dev-kicker" data-reveal>Hello, I'm</p>
+            <h1 class="dev-name" data-reveal style="--d:100ms">Ashish</h1>
+            <p class="dev-role" data-reveal style="--d:200ms">Full Stack Developer</p>
+            <p class="dev-intro" data-reveal style="--d:300ms">
+                Building <em>ToDoo</em> as a calm, fast space for organizing ideas.
+            </p>
+            <a href="#about" class="dev-scroll" data-reveal style="--d:450ms">
+                <i aria-hidden="true"></i>
+                Scroll
+            </a>
+        </section>
 
-                <div class="developer-footer">
-                    <p class="developer-quote">"Building beautiful experiences, one note at a time."</p>
+        <div class="dev-marquee" aria-label="Tech stack: HTML, CSS, JavaScript, Firebase, Flutter, Python" data-reveal>
+            <div class="dev-marquee-track" aria-hidden="true">
+                <div class="dev-marquee-group">
+                    <span class="dev-marquee-word">HTML</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">CSS</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">JavaScript</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Firebase</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Flutter</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Python</span><span class="dev-marquee-star">✦</span>
+                </div>
+                <div class="dev-marquee-group">
+                    <span class="dev-marquee-word">HTML</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">CSS</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">JavaScript</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Firebase</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Flutter</span><span class="dev-marquee-star">✦</span>
+                    <span class="dev-marquee-word">Python</span><span class="dev-marquee-star">✦</span>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="dev-main">
+            <section class="dev-section" id="about" data-reveal>
+                <h2 class="dev-section-label"><span>01</span> About</h2>
+                <p class="dev-lede">
+                    When I'm not coding, I'm sketching new interfaces and polishing the little details so everything feels <em>effortless.</em>
+                </p>
+            </section>
+
+            <section class="dev-section" data-reveal>
+                <h2 class="dev-section-label"><span>02</span> Elsewhere</h2>
+                <div class="dev-rows">
+                    <button type="button" class="dev-row" id="copy-email" data-email="alexmaxx8055@gmail.com">
+                        <span class="dev-row-key">Email</span>
+                        <span class="dev-row-value">alexmaxx8055@gmail.com</span>
+                        <span class="dev-row-hint" id="copy-label">Copy</span>
+                    </button>
+                    <a class="dev-row" href="https://github.com/maxx4688" target="_blank" rel="noopener noreferrer">
+                        <span class="dev-row-key">GitHub</span>
+                        <span class="dev-row-value">maxx4688</span>
+                        <span class="dev-row-hint" aria-hidden="true">↗</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="dev-section" data-reveal>
+                <h2 class="dev-section-label"><span>03</span> The project</h2>
+                <div>
+                    <p class="dev-lede">ToDoo — crafted for clean, <em>everyday</em> productivity.</p>
+                    <a href="todoos.html" class="dev-cta">
+                        <span>Open workspace</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <section class="dev-quote" data-reveal>
+            <p>Building beautiful experiences, one note at a time.</p>
+        </section>
+    </main>
+
+    <footer class="dev-footer">
+        <span>ToDoo</span>
+        <span>© <span id="dev-year"></span> Ashish</span>
+    </footer>
 
     <script src="utils.js"></script>
     <script>
-        // Keep theme consistent with the rest of the app
         document.addEventListener('DOMContentLoaded', () => {
+            // Keep theme consistent with the rest of the app
             if (window.ThemeManager) {
                 window.ThemeManager.init();
+            }
+
+            document.getElementById('dev-theme').addEventListener('click', () => {
+                window.ThemeManager?.toggleTheme();
+            });
+
+            document.getElementById('dev-year').textContent = new Date().getFullYear();
+
+            // Go back to wherever the visitor came from, falling back to the home link
+            document.getElementById('dev-back').addEventListener('click', (e) => {
+                const cameFromHere = document.referrer && new URL(document.referrer).origin === location.origin;
+                if (cameFromHere && history.length > 1) {
+                    e.preventDefault();
+                    history.back();
+                }
+            });
+
+            // Copy email
+            const copyBtn = document.getElementById('copy-email');
+            const copyLabel = document.getElementById('copy-label');
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(copyBtn.dataset.email);
+                    copyLabel.textContent = 'Copied';
+                } catch {
+                    window.location.href = `mailto:${copyBtn.dataset.email}`;
+                    return;
+                }
+                setTimeout(() => { copyLabel.textContent = 'Copy'; }, 1600);
+            });
+
+            // Reveal on scroll
+            const items = document.querySelectorAll('[data-reveal]');
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-in');
+                            io.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+                items.forEach((el) => io.observe(el));
+            } else {
+                items.forEach((el) => el.classList.add('is-in'));
+            }
+
+            // Soft glow follows the cursor
+            if (matchMedia('(hover: hover)').matches) {
+                let tx = innerWidth / 2, ty = innerHeight * 0.3, x = tx, y = ty;
+                addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; });
+                const tick = () => {
+                    x += (tx - x) * 0.08;
+                    y += (ty - y) * 0.08;
+                    document.body.style.setProperty('--gx', `${x}px`);
+                    document.body.style.setProperty('--gy', `${y}px`);
+                    requestAnimationFrame(tick);
+                };
+                tick();
             }
         });
     </script>
 </body>
 </html>
-
