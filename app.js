@@ -362,8 +362,15 @@ function setupSettingsEvents() {
     });
 
     // Developer page
-    document.getElementById('developer-page-btn')?.addEventListener('click', () => {
+    const developerBtn = document.getElementById('developer-page-btn');
+    developerBtn?.addEventListener('click', () => {
         window.location.href = 'dev.html';
+    });
+    developerBtn?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.location.href = 'dev.html';
+        }
     });
 
     // Logout

@@ -707,6 +707,7 @@ body {
     line-height: 1.1;
     margin-bottom: 16px;
     letter-spacing: -1px;
+    font-weight: 700;
 }
 
 .hero-eye brow,
@@ -1464,9 +1465,21 @@ body {
     gap: 16px;
 }
 
+/* Grid view is a staggered (masonry) layout: cards keep their natural height */
 .notes-list.grid-view {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    display: block;
+    columns: 300px;
+    column-gap: 20px;
+}
+
+.notes-list.grid-view .note-card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+}
+
+/* Let grid cards grow taller than list rows so the columns visibly stagger */
+.notes-list.grid-view .note-content-preview {
+    -webkit-line-clamp: 6;
 }
 
 .note-card {
@@ -1570,7 +1583,7 @@ body {
     margin-bottom: 16px;
     line-height: 1.6;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     transition: color 0.3s ease;
@@ -3157,7 +3170,7 @@ body.glass-mode .note-card {
 /* Responsive */
 @media (max-width: 768px) {
     .notes-list.grid-view {
-        grid-template-columns: 1fr;
+        columns: 1;
     }
     
     .modal-content {
@@ -3174,3 +3187,91 @@ body.glass-mode .note-card {
 .hidden {
     display: none !important;
 }
+
+/* ---------- Markdown rendering ---------- */
+.markdown-body > :first-child { margin-top: 0; }
+.markdown-body > :last-child { margin-bottom: 0; }
+.markdown-body p { margin: 0 0 0.6em; }
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    margin: 0.8em 0 0.35em;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+.markdown-body h1 { font-size: 1.5em; }
+.markdown-body h2 { font-size: 1.3em; }
+.markdown-body h3 { font-size: 1.15em; }
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 { font-size: 1em; }
+.markdown-body ul,
+.markdown-body ol { margin: 0 0 0.6em; padding-left: 1.4em; }
+.markdown-body li { margin: 0.15em 0; }
+.markdown-body li.md-task { list-style: none; margin-left: -1.2em; }
+.markdown-body li.md-task.is-done { text-decoration: line-through; opacity: 0.6; }
+.markdown-body li.md-task input { margin-right: 0.35em; accent-color: var(--theme-color); }
+.markdown-body a { color: var(--theme-color); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--text-color) 9%, transparent);
+}
+.markdown-body pre {
+    margin: 0 0 0.7em;
+    padding: 12px 14px;
+    border-radius: 12px;
+    overflow-x: auto;
+    background: color-mix(in srgb, var(--text-color) 7%, transparent);
+}
+.markdown-body pre code { padding: 0; background: none; font-size: 0.85em; }
+.markdown-body blockquote {
+    margin: 0 0 0.7em;
+    padding: 0.1em 0 0.1em 14px;
+    border-left: 3px solid var(--theme-color);
+    color: var(--text-secondary);
+}
+.markdown-body hr {
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
+    margin: 1em 0;
+}
+.markdown-body img { max-width: 100%; border-radius: 10px; }
+.markdown-body del { opacity: 0.7; }
+
+/* Card preview: keep markdown compact inside the line clamp */
+.note-content-preview.markdown-body p,
+.note-content-preview.markdown-body ul,
+.note-content-preview.markdown-body ol,
+.note-content-preview.markdown-body blockquote,
+.note-content-preview.markdown-body pre { margin-bottom: 0; }
+.note-content-preview.markdown-body h1,
+.note-content-preview.markdown-body h2,
+.note-content-preview.markdown-body h3,
+.note-content-preview.markdown-body h4,
+.note-content-preview.markdown-body h5,
+.note-content-preview.markdown-body h6 { font-size: 1em; margin: 0; }
+/* Code blocks flatten to plain flowing lines so the 2-line clamp always holds */
+.note-content-preview.markdown-body pre {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.note-content-preview.markdown-body pre code { font-size: 0.9em; }
+.note-content-preview.markdown-body blockquote { padding-top: 0; padding-bottom: 0; }
+.note-content-preview.markdown-body hr { display: none; }
+.note-content-preview.markdown-body img { display: none; }
+
+/* View page: keep long-note columns tidy */
+.view-note-body.markdown-body pre,
+.view-note-body .markdown-body pre { break-inside: avoid; }
