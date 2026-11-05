@@ -192,6 +192,7 @@ function setupHomeEvents() {
     }
 
     setupAndroidAd();
+    setupDownloadToggle();
 
     if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries) => {
@@ -224,6 +225,21 @@ function setupHomeEvents() {
     // Creative fields FAB
     document.getElementById('creative-fab')?.addEventListener('click', () => {
         PageManager.showPage('creative-fields-page');
+    });
+}
+
+function setupDownloadToggle() {
+    const toggle = document.getElementById('download-toggle');
+    const panel = document.getElementById('download-more');
+    if (!toggle || !panel) return;
+
+    const label = toggle.querySelector('.download-toggle-label');
+    toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.classList.toggle('is-open', open);
+        panel.inert = !open;
+        if (label) label.textContent = open ? 'Hide other devices' : 'Other devices';
     });
 }
 
