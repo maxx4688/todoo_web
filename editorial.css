@@ -1524,3 +1524,337 @@ body.workspace .logout-btn.sp-row {
         transition-delay: 0s !important;
     }
 }
+
+/* ---------- Home: Android download ---------- */
+body.landing .app-download-section {
+    padding: clamp(4.5rem, 10vh, 7.5rem) var(--landing-pad);
+    scroll-margin-top: 100px;
+}
+
+body.landing .app-download-section h3 {
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    line-height: 1;
+}
+
+body.landing .app-download-section .info-subtitle strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+body.landing .download-box {
+    max-width: 500px;
+}
+
+/* Main: arm64, a compact highlighted banner */
+body.landing .download-main {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 22px;
+    padding: 22px 26px;
+    border-radius: 22px;
+    background: var(--theme-color);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 24px 60px -26px color-mix(in srgb, var(--theme-color) 75%, transparent);
+    transition: transform 0.5s var(--ed-ease), box-shadow 0.5s ease;
+}
+
+body.landing .download-main:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 30px 70px -24px color-mix(in srgb, var(--theme-color) 85%, transparent);
+}
+
+body.landing .download-android {
+    width: 40px;
+    height: 40px;
+    fill: currentColor;
+    stroke: none;
+}
+
+body.landing .download-copy h4 {
+    margin: 0 0 4px;
+    font-family: var(--ed-serif);
+    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+}
+
+body.landing .download-copy p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.landing .download-badge {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.landing .download-foot {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+body.landing .download-size {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+body.landing .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background 0.4s var(--ed-ease), color 0.4s var(--ed-ease);
+}
+
+body.landing .download-btn svg,
+body.landing .download-row-btn svg,
+body.landing .download-toggle svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+body.landing .download-main:hover .download-btn {
+    background: #000;
+    color: #fff;
+}
+
+/* Toggle: minimize / expand the other variants */
+body.landing .download-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 9px 14px 9px 16px;
+    border: 1px dashed var(--ed-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ed-mute);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+body.landing .download-toggle:hover {
+    color: var(--text-color);
+    border-color: var(--text-color);
+}
+
+body.landing .download-toggle-count {
+    display: grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-color) 10%, transparent);
+    font-size: 11px;
+    letter-spacing: 0;
+}
+
+body.landing .download-toggle svg {
+    transition: transform 0.4s var(--ed-ease);
+}
+
+body.landing .download-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+/* Collapsible list (animates height 0 -> auto) */
+body.landing .download-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s var(--ed-ease);
+}
+
+body.landing .download-more.is-open {
+    grid-template-rows: 1fr;
+}
+
+body.landing .download-more-inner {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+body.landing .download-more.is-open .download-more-inner {
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+
+/* Other variants: slim list rows, not cards */
+body.landing .download-row {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--ed-line);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+body.landing .download-more-inner .download-row:first-child {
+    margin-top: 6px;
+    border-top: 1px solid var(--ed-line);
+}
+
+body.landing .download-row-name {
+    font-family: var(--ed-serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+body.landing .download-row-desc {
+    font-size: 0.9rem;
+    color: var(--ed-mute);
+}
+
+body.landing .download-row-size {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ed-mute);
+}
+
+body.landing .download-row-btn {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--ed-line);
+    border-radius: 50%;
+    transition: background 0.4s var(--ed-ease), color 0.4s var(--ed-ease), border-color 0.4s var(--ed-ease), transform 0.4s var(--ed-ease);
+}
+
+body.landing .download-row:hover .download-row-btn {
+    background: var(--theme-color);
+    border-color: var(--theme-color);
+    color: #fff;
+    transform: translateY(2px);
+}
+
+body.landing .download-note {
+    margin: 22px 0 0;
+    font-size: 0.9rem;
+    color: var(--ed-mute);
+}
+
+body.landing .download-main {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 20px;
+    gap: 16px 16px;
+}
+
+body.landing .download-foot {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+}
+
+body.landing .download-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    row-gap: 2px;
+}
+
+body.landing .download-row-desc {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+body.landing .download-row-size {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+body.landing .download-row-btn {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.landing .download-more,
+    body.landing .download-more-inner,
+    body.landing .download-toggle svg {
+        transition-duration: 0.01s;
+    }
+}
+
+/* Download: left column (copy + buttons), right column (phone, full height) */
+body.landing .download-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(1.5rem, 5vw, 5rem);
+    align-items: center;
+}
+
+body.landing .download-left {
+    min-width: 0;
+}
+
+body.landing .download-phone {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 40%, rgba(0, 0, 0, 0.55) 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 40%, rgba(0, 0, 0, 0.55) 70%, transparent 100%);
+}
+
+body.landing .download-phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: -14%;
+    user-select: none;
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    body.landing .download-layout {
+        grid-template-columns: 1fr;
+    }
+
+    body.landing .download-box {
+        max-width: none;
+    }
+
+    body.landing .download-phone {
+        max-width: 420px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
