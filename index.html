@@ -236,52 +236,6 @@
                 </div>
             </section>
 
-            <!-- Todoos highlight section (visible when logged in) -->
-            <section id="todoos-entry-section" class="todoos-highlight-section hidden">
-                <a href="todoos.html" class="todoos-highlight-inner" id="todoos-entry-link">
-                    <div class="todoos-highlight-text">
-                        <p class="hero-eyebrow">Your notes list</p>
-                        <h3>Open the <span class="theme-color">Todoos</span> board.</h3>
-                        <p class="todoos-highlight-subtitle">
-                            Switch from browsing to doing. Create rich notes, manage checklists,
-                            star your favorites, and search across everything instantly.
-                        </p>
-                        <ul class="todoos-feature-list">
-                            <li>Fast, card-based layout for todos and notes</li>
-                            <li>Smart search and filters to find anything quickly</li>
-                            <li>Checklists, links, and favorites for important work</li>
-                            <li>Creative view for turning ideas into polished cards</li>
-                        </ul>
-                        <span class="todoos-entry-btn">
-                            Open notes list
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M5 12h14M13 6l6 6-6 6" />
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="todoos-highlight-visual" aria-hidden="true">
-                        <div class="todoos-pill-row">
-                            <span class="todoos-pill">Today</span>
-                            <span class="todoos-pill">Ideas</span>
-                            <span class="todoos-pill">Work</span>
-                        </div>
-                        <div class="todoos-preview-card">
-                            <div class="todoos-preview-header">
-                                <span class="todoos-preview-dot"></span>
-                                <span class="todoos-preview-title">Plan your perfect day</span>
-                            </div>
-                            <p class="todoos-preview-body">
-                                Draft tasks, add quick links, and check things off as you go.
-                            </p>
-                            <div class="todoos-preview-checks">
-                                <span>☑ Morning focus block</span>
-                                <span>☐ Ship one tiny improvement</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </section>
-
             <!-- Android App Feature Section -->
             <section id="android-section" class="android-section android-ad">
                 <video
@@ -376,6 +330,47 @@
                 </div>
             </section>
 
+            <!-- Share / Scan Section -->
+            <section id="share-section" class="share-section">
+                <div class="share-layout">
+                    <div class="share-copy section-intro reveal">
+                        <p class="hero-eyebrow">Pass it on</p>
+                        <h3>Scan it.<br><span class="theme-color">Share it.</span></h3>
+                        <p class="info-subtitle">
+                            Point a phone camera at the code to open ToDoo instantly, or send the link to
+                            someone who could use a calmer place to think.
+                        </p>
+
+                        <a class="share-link" href="https://todoo.maxx4688.qd.je" target="_blank" rel="noopener">
+                            <span class="share-link-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+                            </span>
+                            <span class="share-link-text"><b>todoo.</b>maxx4688.qd.je</span>
+                            <svg class="share-link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+                        </a>
+
+                        <div class="share-actions">
+                            <button type="button" class="primary-auth-btn share-copy-btn" id="share-copy-btn" data-url="https://todoo.maxx4688.qd.je">
+                                <span class="share-copy-label">Copy link</span>
+                            </button>
+                            <button type="button" class="ghost-btn share-native-btn" id="share-native-btn" hidden>Share</button>
+                        </div>
+
+                        <ol class="share-steps">
+                            <li><span>01</span> Open your phone camera</li>
+                            <li><span>02</span> Point it at the code</li>
+                            <li><span>03</span> Tap the link to start writing</li>
+                        </ol>
+                    </div>
+
+                    <figure class="share-visual reveal">
+                        <span class="share-glow" aria-hidden="true"></span>
+                        <img class="share-img-light" src="assets/scanner.png" alt="QR code that opens todoo.maxx4688.qd.je" loading="lazy" decoding="async">
+                        <img class="share-img-dark" src="assets/scanner_dark.png" alt="QR code that opens todoo.maxx4688.qd.je" loading="lazy" decoding="async">
+                    </figure>
+                </div>
+            </section>
+
             <section class="close-cta">
                 <div class="close-cta-inner reveal">
                     <p class="hero-eyebrow">Ready when you are</p>
@@ -401,6 +396,7 @@
                             <a href="#home-hero">Home</a>
                             <a href="#suggestions-section">Features</a>
                             <a href="#android-section">Android</a>
+                            <a href="#share-section">Share</a>
                             <a href="todoos.html" id="footer-todoos-link">Todoos</a>
                         </div>
                         <div>
@@ -495,31 +491,40 @@
 
     <!-- Add/Edit Note Modal -->
     <div id="note-modal" class="modal">
-        <div class="modal-content note-modal-content">
+        <div class="modal-content note-modal-content" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
             <div class="modal-header">
-                <h2 class="theme-color" id="note-modal-title">Add new Note..</h2>
-                <button class="close-modal">&times;</button>
+                <h2 id="note-modal-title">New note</h2>
+                <div class="note-modal-header-actions">
+                    <button type="button" class="note-modal-icon-btn favorite-btn" id="note-favorite-btn" aria-label="Favorite" aria-pressed="false" title="Favorite">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z"/></svg>
+                    </button>
+                    <button type="button" class="note-modal-icon-btn close-modal" aria-label="Close" title="Close">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                    </button>
+                </div>
             </div>
             <div class="note-form">
-                <div class="title-row">
-                    <input type="text" id="note-title-input" placeholder="Title of your note." class="form-input">
-                    <button class="favorite-btn" id="note-favorite-btn">♡</button>
-                </div>
-                
+                <input type="text" id="note-title-input" placeholder="Title" class="form-input note-title-field" autocomplete="off">
+
                 <div class="checklist-section">
                     <div class="checklist-header">
-                        <span class="checklist-icon">✓</span>
+                        <svg class="checklist-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6l2 2 3-3M4 13l2 2 3-3M12 7h8M12 14h8M4 19h16"/></svg>
                         <span class="checklist-title">Checklist</span>
                     </div>
-                    <div class="checklist-input-row">
-                        <input type="text" id="checklist-item-input" placeholder="Add checklist item..." class="checklist-input">
-                        <button class="add-checklist-btn" id="add-checklist-btn">+</button>
-                    </div>
                     <div id="checklist-items" class="checklist-items"></div>
+                    <div class="checklist-input-row">
+                        <input type="text" id="checklist-item-input" placeholder="Add an item" class="checklist-input" autocomplete="off">
+                        <button type="button" class="note-modal-icon-btn add-checklist-btn" id="add-checklist-btn" aria-label="Add item" title="Add item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        </button>
+                    </div>
                 </div>
 
-                <textarea id="note-content-input" placeholder="Detailed note here." class="form-textarea large"></textarea>
-                <button class="save-note-btn" id="save-note-btn">Done</button>
+                <textarea id="note-content-input" placeholder="Write your note… (Markdown supported)" class="form-textarea large"></textarea>
+            </div>
+            <div class="note-modal-footer">
+                <button type="button" class="note-modal-cancel close-modal">Cancel</button>
+                <button type="button" class="save-note-btn" id="save-note-btn">Save</button>
             </div>
         </div>
     </div>
