@@ -744,7 +744,7 @@ body.workspace .note-urls {
     margin: 10px 0 0;
 }
 
-/* Quiet actions, revealed on hover */
+/* Quiet icon actions, revealed on hover (a favorited heart always shows) */
 body.workspace .note-actions {
     grid-column: 3;
     grid-row: 1;
@@ -754,67 +754,82 @@ body.workspace .note-actions {
     margin: 0;
     padding: 0;
     border: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-body.workspace .note-card:hover .note-actions,
-body.workspace .note-card:focus-within .note-actions {
-    opacity: 1;
 }
 
 body.workspace .note-action-buttons {
+    display: flex;
+    align-items: center;
     gap: 2px;
 }
 
-body.workspace .note-action-btn,
-body.workspace .note-favorite-btn,
-body.workspace .note-delete-btn {
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    color: var(--text-color);
-}
-
-body.workspace .note-action-btn::before,
-body.workspace .note-delete-btn::before {
-    display: none;
-}
-
-body.workspace .note-action-btn,
-body.workspace .note-favorite-btn {
+body.workspace .note-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 34px;
     height: 34px;
     padding: 0;
+    border: 0;
     border-radius: 50%;
-    font-size: 15px;
+    background: transparent;
+    box-shadow: none;
+    color: var(--ed-mute);
+    cursor: pointer;
+    opacity: 0;
+    transform: none;
+    animation: none;
+    transition: opacity 0.3s ease, color 0.2s ease, background 0.2s ease;
+}
+
+body.workspace .note-icon-btn::before {
+    display: none;
+}
+
+body.workspace .note-icon-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease, transform 0.2s ease;
+}
+
+body.workspace .note-card:hover .note-icon-btn,
+body.workspace .note-card:focus-within .note-icon-btn,
+body.workspace .note-icon-btn.favorited {
+    opacity: 1;
+}
+
+body.workspace .note-icon-btn:hover,
+body.workspace .note-icon-btn:focus-visible {
+    transform: none;
+    box-shadow: none;
+    color: var(--text-color);
+    background: color-mix(in srgb, var(--text-color) 8%, transparent);
 }
 
 body.workspace .note-favorite-btn.favorited {
-    color: var(--theme-color);
+    color: #e5484d;
 }
 
-body.workspace .note-action-btn:hover,
+body.workspace .note-favorite-btn.favorited svg {
+    fill: currentColor;
+}
+
 body.workspace .note-favorite-btn:hover {
-    transform: none;
-    background: color-mix(in srgb, var(--text-color) 8%, transparent);
-    box-shadow: none;
+    color: #e5484d;
 }
 
-body.workspace .note-delete-btn {
-    padding: 8px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ed-mute);
+body.workspace .note-favorite-btn:active svg {
+    transform: scale(0.85);
 }
 
-body.workspace .note-delete-btn:hover {
-    transform: none;
-    background: transparent;
-    box-shadow: none;
-    color: var(--theme-color);
+body.workspace .note-delete-btn:hover,
+body.workspace .note-delete-btn:focus-visible {
+    color: #e5484d;
+    background: color-mix(in srgb, #e5484d 10%, transparent);
 }
 
 /* Reveal finished: no lift, no stagger delay on hover */
@@ -833,7 +848,7 @@ html.js body.workspace .note-card.reveal.is-visible.is-settled {
 }
 
 @media (hover: none) {
-    body.workspace .note-actions {
+    body.workspace .note-icon-btn {
         opacity: 1;
     }
 }
@@ -1857,4 +1872,777 @@ body.landing .download-phone img {
         width: 100%;
         margin: 0 auto;
     }
+}
+
+/* ===== Note editor dialog =====
+   Fixed header + scrolling body + pinned footer so Save never falls off-screen. */
+body.modal-open {
+    overflow: hidden;
+}
+
+#note-modal {
+    padding: 24px;
+    background: color-mix(in srgb, #0b1220 38%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overscroll-behavior: contain;
+}
+
+#note-modal .note-modal-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 720px;
+    height: min(760px, calc(100dvh - 48px));
+    max-height: none;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid var(--ed-line);
+    background: var(--surface-color);
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+    animation: noteModalIn 0.28s var(--ed-ease);
+}
+
+@keyframes noteModalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+}
+
+#note-modal .modal-header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    padding: 18px 20px 14px 28px;
+    border-bottom: 1px solid var(--ed-line);
+}
+
+#note-modal .modal-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ed-mute);
+}
+
+#note-modal .note-modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#note-modal .note-modal-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ed-mute);
+    font-size: 0;
+    cursor: pointer;
+    transform: none;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+#note-modal .note-modal-icon-btn svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease, transform 0.15s ease;
+}
+
+#note-modal .note-modal-icon-btn:hover,
+#note-modal .note-modal-icon-btn:focus-visible {
+    color: var(--text-color);
+    background: color-mix(in srgb, var(--text-color) 8%, transparent);
+    transform: none;
+}
+
+#note-modal .note-modal-icon-btn:active svg {
+    transform: scale(0.88);
+}
+
+#note-modal .favorite-btn:hover,
+#note-modal .favorite-btn.favorited {
+    color: #e5484d;
+}
+
+#note-modal .favorite-btn.favorited svg {
+    fill: currentColor;
+}
+
+#note-modal .note-form {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px 28px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+#note-modal .note-title-field {
+    flex: none;
+    width: 100%;
+    padding: 4px 0 10px;
+    border: 0;
+    border-bottom: 1px solid var(--ed-line);
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-color);
+    font-family: var(--ed-serif);
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    transition: border-color 0.2s ease;
+}
+
+#note-modal .note-title-field:focus {
+    outline: none;
+    background: transparent;
+    border-bottom-color: var(--theme-color);
+}
+
+#note-modal .note-title-field::placeholder,
+#note-modal .form-textarea::placeholder,
+#note-modal .checklist-input::placeholder {
+    color: color-mix(in srgb, var(--text-color) 38%, transparent);
+}
+
+#note-modal .checklist-section {
+    flex: none;
+    padding: 14px 16px;
+    border: 1px solid var(--ed-line);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--text-color) 2.5%, transparent);
+}
+
+#note-modal .checklist-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ed-mute);
+}
+
+#note-modal .checklist-icon {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#note-modal .checklist-items {
+    gap: 2px;
+}
+
+#note-modal .checklist-items:not(:empty) {
+    margin-bottom: 6px;
+}
+
+#note-modal .checklist-item {
+    gap: 10px;
+    padding: 2px 0 2px 2px;
+    border-radius: 8px;
+}
+
+#note-modal .checklist-item input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    margin: 0;
+}
+
+#note-modal .checklist-item-text {
+    font-size: 15px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+#note-modal .checklist-item-remove {
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+}
+
+#note-modal .checklist-item-remove svg {
+    width: 15px;
+    height: 15px;
+}
+
+#note-modal .checklist-item:hover .checklist-item-remove,
+#note-modal .checklist-item-remove:focus-visible {
+    opacity: 1;
+}
+
+#note-modal .checklist-item-remove:hover {
+    color: #e5484d;
+}
+
+#note-modal .checklist-input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+#note-modal .checklist-input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 15px;
+}
+
+#note-modal .add-checklist-btn {
+    color: var(--theme-color);
+}
+
+#note-modal .form-textarea {
+    flex: 1 0 220px;
+    width: 100%;
+    min-height: 220px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 16px;
+    line-height: 1.7;
+    resize: none;
+}
+
+#note-modal .form-textarea:focus {
+    outline: none;
+    background: transparent;
+}
+
+#note-modal .note-modal-footer {
+    flex: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--ed-line);
+    background: var(--surface-color);
+}
+
+#note-modal .note-modal-cancel,
+#note-modal .save-note-btn {
+    width: auto;
+    min-width: 96px;
+    height: 40px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--ed-serif);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: none;
+    transform: none;
+    transition: background 0.2s ease, color 0.2s ease, filter 0.2s ease;
+}
+
+#note-modal .note-modal-cancel {
+    background: transparent;
+    color: var(--ed-mute);
+}
+
+#note-modal .note-modal-cancel:hover {
+    color: var(--text-color);
+    background: color-mix(in srgb, var(--text-color) 7%, transparent);
+}
+
+#note-modal .save-note-btn {
+    background: var(--theme-color);
+    color: #fff;
+}
+
+#note-modal .save-note-btn::before {
+    display: none;
+}
+
+#note-modal .save-note-btn:hover {
+    filter: brightness(1.06);
+    transform: none;
+    box-shadow: none;
+}
+
+@media (max-width: 640px) {
+    #note-modal {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    #note-modal .note-modal-content {
+        max-width: none;
+        height: 100dvh;
+        border-radius: 0;
+        border: 0;
+    }
+
+    #note-modal .modal-header {
+        padding: 12px 12px 10px 20px;
+    }
+
+    #note-modal .note-form {
+        padding: 18px 20px;
+    }
+
+    #note-modal .checklist-item-remove {
+        opacity: 1;
+    }
+
+    #note-modal .save-note-btn {
+        flex: 1;
+    }
+}
+
+/* ===== Notes loading skeleton ===== */
+body.workspace .notes-skeleton {
+    margin: 0;
+    text-align: left;
+    border-bottom: 1px solid var(--ed-line);
+}
+
+body.workspace .notes-skeleton.hidden {
+    display: none;
+}
+
+.notes-skeleton .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.notes-skeleton .skeleton-row {
+    display: grid;
+    grid-template-columns: clamp(2.5rem, 7vw, 4.5rem) minmax(0, 1fr);
+    column-gap: clamp(0.5rem, 2vw, 1.5rem);
+    align-items: start;
+    padding: clamp(1.1rem, 2.6vw, 1.7rem) 0;
+    border-top: 1px solid var(--ed-line);
+    animation: skFade 0.5s var(--ed-ease) both;
+}
+
+.notes-skeleton .skeleton-row:nth-of-type(2) { animation-delay: 0.06s; opacity: 0.85; }
+.notes-skeleton .skeleton-row:nth-of-type(3) { animation-delay: 0.12s; opacity: 0.65; }
+.notes-skeleton .skeleton-row:nth-of-type(4) { animation-delay: 0.18s; opacity: 0.45; }
+
+.notes-skeleton .sk-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notes-skeleton .sk {
+    display: block;
+    border-radius: 999px;
+    background:
+        linear-gradient(100deg,
+            transparent 30%,
+            color-mix(in srgb, var(--theme-color) 14%, transparent) 50%,
+            transparent 70%)
+        0 0 / 250% 100% no-repeat,
+        color-mix(in srgb, var(--text-color) 7%, transparent);
+    animation: skShimmer 1.4s ease-in-out infinite;
+}
+
+.notes-skeleton .sk-num {
+    width: 18px;
+    height: 18px;
+    margin-top: 10px;
+    background-color: color-mix(in srgb, var(--theme-color) 22%, transparent);
+}
+
+.notes-skeleton .sk-title {
+    height: clamp(1.6rem, 3vw, 2.2rem);
+    max-width: 420px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+}
+
+.notes-skeleton .sk-line {
+    height: 12px;
+    max-width: 620px;
+}
+
+.notes-skeleton .sk-line[style*="width:0"] {
+    display: none;
+}
+
+@keyframes skShimmer {
+    from { background-position: 150% 0, 0 0; }
+    to { background-position: -150% 0, 0 0; }
+}
+
+@keyframes skFade {
+    from { transform: translateY(6px); }
+    to { transform: none; }
+}
+
+@media (max-width: 640px) {
+    .notes-skeleton .skeleton-row {
+        grid-template-columns: 1.75rem minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notes-skeleton .sk,
+    .notes-skeleton .skeleton-row {
+        animation: none;
+    }
+}
+
+/* ===== All / Favorites switch ===== */
+body.workspace .notes-filter {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    margin: clamp(1.6rem, 4vw, 2.4rem) 0 clamp(1rem, 2.5vw, 1.5rem);
+    padding: 4px;
+    border: 1px solid var(--ed-line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-color) 3%, transparent);
+    isolation: isolate;
+}
+
+body.workspace .notes-filter-pill {
+    position: absolute;
+    z-index: -1;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    border-radius: 999px;
+    background: var(--surface-color);
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 4px 14px color-mix(in srgb, var(--theme-color) 16%, transparent);
+    transition: transform 0.45s var(--ed-ease), box-shadow 0.3s ease;
+}
+
+body.workspace .notes-filter.is-fav .notes-filter-pill {
+    transform: translateX(100%);
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 4px 14px rgba(229, 72, 77, 0.2);
+}
+
+body.workspace .notes-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 128px;
+    height: 40px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ed-mute);
+    font-family: var(--ed-serif);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+body.workspace .notes-filter-btn:hover,
+body.workspace .notes-filter-btn.is-active {
+    color: var(--text-color);
+}
+
+body.workspace .notes-filter-btn:focus-visible {
+    outline: 2px solid var(--theme-color);
+    outline-offset: 2px;
+}
+
+body.workspace .notes-filter-btn svg {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.25s ease, color 0.25s ease, transform 0.35s var(--ed-ease);
+}
+
+body.workspace .notes-filter-btn[data-filter="fav"]:hover svg,
+body.workspace .notes-filter-btn[data-filter="fav"].is-active svg {
+    color: #e5484d;
+}
+
+body.workspace .notes-filter-btn[data-filter="fav"].is-active svg {
+    fill: currentColor;
+    animation: favPop 0.45s var(--ed-ease);
+}
+
+@keyframes favPop {
+    0% { transform: scale(0.7); }
+    55% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+}
+
+body.workspace .notes-filter-count {
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-color) 7%, transparent);
+    color: var(--ed-mute);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+body.workspace .notes-filter-btn[data-filter="all"].is-active .notes-filter-count {
+    background: color-mix(in srgb, var(--theme-color) 14%, transparent);
+    color: var(--theme-color);
+}
+
+body.workspace .notes-filter-btn[data-filter="fav"].is-active .notes-filter-count {
+    background: rgba(229, 72, 77, 0.12);
+    color: #e5484d;
+}
+
+@media (max-width: 640px) {
+    body.workspace .notes-filter {
+        display: grid;
+        width: 100%;
+    }
+
+    body.workspace .notes-filter-btn {
+        min-width: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.workspace .notes-filter-pill,
+    body.workspace .notes-filter-btn svg {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* ---------- Home: share / scan ---------- */
+body.landing .share-section {
+    padding: clamp(4.5rem, 10vh, 7.5rem) var(--landing-pad);
+    border-top: 1px solid var(--ed-line);
+    scroll-margin-top: 100px;
+}
+
+body.landing .share-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+}
+
+body.landing .share-copy {
+    margin-bottom: 0;
+}
+
+body.landing .share-section h3 {
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    line-height: 1;
+}
+
+body.landing .share-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 460px;
+    margin-top: clamp(1.6rem, 4vh, 2.2rem);
+    padding: 14px 18px 14px 14px;
+    border: 1px solid var(--ed-line);
+    border-radius: 18px;
+    color: var(--text-color);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--surface-color) 70%, transparent);
+    transition: border-color 0.3s ease, transform 0.4s var(--ed-ease);
+}
+
+body.landing .share-link:hover {
+    border-color: var(--theme-color);
+    transform: translateY(-2px);
+}
+
+body.landing .share-link-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--theme-color) 12%, transparent);
+    color: var(--theme-color);
+}
+
+body.landing .share-link svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+body.landing .share-link-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-weight: 500;
+}
+
+body.landing .share-link-text b {
+    color: var(--theme-color);
+    font-weight: 600;
+}
+
+body.landing .share-link-arrow {
+    flex: none;
+    color: var(--ed-mute);
+    transition: transform 0.4s var(--ed-ease), color 0.3s ease;
+}
+
+body.landing .share-link:hover .share-link-arrow {
+    color: var(--theme-color);
+    transform: translate(2px, -2px);
+}
+
+body.landing .share-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+body.landing .share-actions .primary-auth-btn,
+body.landing .share-actions .ghost-btn {
+    padding: 13px 24px;
+}
+
+body.landing .share-copy-btn.is-copied {
+    border-color: var(--theme-color);
+    background: var(--theme-color);
+    color: #fff;
+}
+
+body.landing .share-steps {
+    display: grid;
+    gap: 10px;
+    margin: clamp(1.8rem, 4vh, 2.4rem) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ed-mute);
+    font-size: 15px;
+}
+
+body.landing .share-steps li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+body.landing .share-steps span {
+    color: var(--theme-color);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+}
+
+body.landing .share-visual {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0;
+}
+
+body.landing .share-glow {
+    position: absolute;
+    inset: 18% 8% 6%;
+    z-index: -1;
+    border-radius: 40%;
+    background: var(--theme-color);
+    opacity: 0.18;
+    filter: blur(60px);
+}
+
+body.landing .share-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+}
+
+@media (max-width: 900px) {
+    body.landing .share-layout {
+        grid-template-columns: 1fr;
+    }
+
+    body.landing .share-visual {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 640px) {
+    body.landing .share-actions .primary-auth-btn,
+    body.landing .share-actions .ghost-btn {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        margin: 0;
+    }
+}
+
+/* Scanner image swaps with the theme */
+body.landing .share-visual .share-img-dark,
+[data-theme="dark"] body.landing .share-visual .share-img-light {
+    display: none;
+}
+
+[data-theme="dark"] body.landing .share-visual .share-img-dark {
+    display: block;
 }

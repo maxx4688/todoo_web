@@ -49,6 +49,7 @@ const Notes = {
             }, (error) => {
                 console.error('Error loading notes:', error);
                 Toast.error('Failed to load notes');
+                document.getElementById('notes-loading')?.classList.add('hidden');
             });
 
         } catch (error) {
@@ -205,22 +206,67 @@ const Notes = {
         await this.updateNote(noteId, note.noteTitle, note.noteContent, newFavStatus, note.checklist);
     },
 
+    filter: 'all',
+    query: '',
+
+    setFilter(filter) {
+        this.filter = filter === 'fav' ? 'fav' : 'all';
+        document.querySelectorAll('.notes-filter-btn').forEach((btn) => {
+            const active = btn.dataset.filter === this.filter;
+            btn.classList.toggle('is-active', active);
+            btn.setAttribute('aria-selected', String(active));
+        });
+        document.querySelector('.notes-filter')?.classList.toggle('is-fav', this.filter === 'fav');
+        this.renderNotes();
+    },
+
+    setEmptyState(eyebrow, heading, text) {
+        const emptyState = document.getElementById('empty-state');
+        if (!emptyState) return;
+        const [eyebrowEl, headingEl, textEl] = emptyState.querySelectorAll('.hero-eyebrow, h3, p:not(.hero-eyebrow)');
+        if (eyebrowEl) eyebrowEl.textContent = eyebrow;
+        if (headingEl) headingEl.textContent = heading;
+        if (textEl) textEl.textContent = text;
+        emptyState.classList.remove('hidden');
+    },
+
     renderNotes() {
         const container = document.getElementById('notes-list');
         const emptyState = document.getElementById('empty-state');
-        
+
         if (!container) return;
 
-        if (this.notes.length === 0) {
-            container.innerHTML = '';
-            if (emptyState) emptyState.classList.remove('hidden');
+        const favCount = this.notes.filter(note => note.isFav).length;
+        const allCountEl = document.getElementById('notes-count-all');
+        const favCountEl = document.getElementById('notes-count-fav');
+        if (allCountEl) allCountEl.textContent = this.notes.length;
+        if (favCountEl) favCountEl.textContent = favCount;
+
+        const query = this.query.trim().toLowerCase();
+        const visible = this.notes.filter(note => {
+            if (this.filter === 'fav' && !note.isFav) return false;
+            if (!query) return true;
+            const title = (note.noteTitle || '').toLowerCase();
+            const content = (note.noteContent || '').toLowerCase();
+            return title.includes(query) || content.includes(query);
+        });
+
+        container.innerHTML = '';
+
+        if (visible.length === 0) {
+            if (query) {
+                this.setEmptyState('No matches', 'Todooo doesn\'t exist.', `Nothing matches “${this.query.trim()}”${this.filter === 'fav' ? ' in your favorites' : ''}.`);
+            } else if (this.filter === 'fav' && this.notes.length > 0) {
+                this.setEmptyState('No favorites yet', 'Heart the ones that matter.', 'Tap the heart on any todoo and it will show up here.');
+            } else {
+                this.setEmptyState('Nothing here yet', 'Start with one small note.', 'Capture a thought, a list, or a plan — it all stays in sync.');
+            }
             return;
         }
 
         if (emptyState) emptyState.classList.add('hidden');
-        container.innerHTML = '';
 
-        this.notes.forEach((note, index) => {
+        visible.forEach((note, index) => {
             const noteCard = this.createNoteCard(note, index);
             container.appendChild(noteCard);
         });
@@ -253,12 +299,16 @@ const Notes = {
             ${urls.length > 0 ? `<div class="note-urls"></div>` : ''}
             <div class="note-actions">
                 <div class="note-action-buttons">
-                    <button class="note-action-btn edit-note-btn" data-note-id="${note.id}">✏️</button>
-                    <button class="note-favorite-btn ${note.isFav ? 'favorited' : ''}" data-note-id="${note.id}">
-                        ${note.isFav ? '❤️' : '♡'}
+                    <button class="note-icon-btn note-action-btn edit-note-btn" data-note-id="${note.id}" aria-label="Edit" title="Edit">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
+                    </button>
+                    <button class="note-icon-btn note-favorite-btn ${note.isFav ? 'favorited' : ''}" data-note-id="${note.id}" aria-label="Favorite" aria-pressed="${Boolean(note.isFav)}" title="Favorite">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z"/></svg>
+                    </button>
+                    <button class="note-icon-btn note-delete-btn" data-note-id="${note.id}" aria-label="Delete" title="Delete">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                     </button>
                 </div>
-                <button class="note-delete-btn" data-note-id="${note.id}">Delete</button>
             </div>
         `;
 
@@ -450,13 +500,14 @@ const Notes = {
         const modal = document.getElementById('note-modal');
         const isEdit = note !== null;
 
-        document.getElementById('note-modal-title').textContent = isEdit ? 'Edit your todoo..' : 'Add new Note..';
+        document.getElementById('note-modal-title').textContent = isEdit ? 'Edit note' : 'New note';
         document.getElementById('note-title-input').value = note ? note.noteTitle : '';
         document.getElementById('note-content-input').value = note ? note.noteContent : '';
         
         const favBtn = document.getElementById('note-favorite-btn');
-        favBtn.textContent = (note && note.isFav) ? '❤️' : '♡';
-        favBtn.classList.toggle('favorited', note && note.isFav);
+        const isFav = Boolean(note && note.isFav);
+        favBtn.classList.toggle('favorited', isFav);
+        favBtn.setAttribute('aria-pressed', String(isFav));
 
         // Checklist
         const checklistContainer = document.getElementById('checklist-items');
@@ -468,6 +519,7 @@ const Notes = {
         }
 
         PageManager.showModal('note-modal');
+        setTimeout(() => document.getElementById('note-title-input').focus(), 50);
     },
 
     addChecklistItemToModal(text, isChecked = false, index = null) {
@@ -478,7 +530,7 @@ const Notes = {
         itemDiv.innerHTML = `
             <input type="checkbox" ${isChecked ? 'checked' : ''}>
             <span class="checklist-item-text ${isChecked ? 'checked' : ''}">${this.escapeHtml(text)}</span>
-            <button class="checklist-item-remove">✕</button>
+            <button type="button" class="note-modal-icon-btn checklist-item-remove" aria-label="Remove item" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
         `;
         
         itemDiv.querySelector('input').addEventListener('change', (e) => {
@@ -538,38 +590,8 @@ const Notes = {
     },
 
     searchNotes(query) {
-        if (!query.trim()) {
-            this.renderNotes();
-            return;
-        }
-
-        const filtered = this.notes.filter(note => {
-            const title = note.noteTitle.toLowerCase();
-            const content = note.noteContent.toLowerCase();
-            const searchQuery = query.toLowerCase();
-            return title.includes(searchQuery) || content.includes(searchQuery);
-        });
-
-        const container = document.getElementById('notes-list');
-        const emptyState = document.getElementById('empty-state');
-        
-        if (filtered.length === 0) {
-            container.innerHTML = '';
-            if (emptyState) {
-                emptyState.textContent = "Todooo doesn't exist";
-                emptyState.classList.remove('hidden');
-            }
-            return;
-        }
-
-        if (emptyState) emptyState.classList.add('hidden');
-        container.innerHTML = '';
-
-        filtered.forEach((note, index) => {
-            const noteCard = this.createNoteCard(note, index);
-            container.appendChild(noteCard);
-        });
-        this.revealCards();
+        this.query = query || '';
+        this.renderNotes();
     },
 
     ensureCardObserver() {

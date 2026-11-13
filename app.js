@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const notesSection = document.getElementById('notes-section');
         const fabContainer = document.getElementById('fab-container');
         const primaryAuthBtn = document.getElementById('primary-auth-btn');
-        const todoosEntry = document.getElementById('todoos-entry-section');
 
         if (isTodoosPage) {
             // Todoos page: require login, then show full notes experience.
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const compactHeader = window.matchMedia('(max-width: 720px)').matches;
 
             if (isLoggedIn) {
-                todoosEntry?.classList.remove('hidden');
                 if (primaryAuthBtn) {
                     primaryAuthBtn.textContent = compactHeader ? 'Workspace' : 'Open workspace';
                 }
@@ -49,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     heroCta.textContent = 'Open workspace';
                 }
             } else {
-                todoosEntry?.classList.add('hidden');
                 if (primaryAuthBtn) {
                     primaryAuthBtn.textContent = compactHeader ? 'Log in' : 'Login / Sign up';
                 }
@@ -193,6 +190,7 @@ function setupHomeEvents() {
 
     setupAndroidAd();
     setupDownloadToggle();
+    setupShareSection();
 
     if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries) => {
@@ -226,6 +224,50 @@ function setupHomeEvents() {
     document.getElementById('creative-fab')?.addEventListener('click', () => {
         PageManager.showPage('creative-fields-page');
     });
+}
+
+function setupShareSection() {
+    const copyBtn = document.getElementById('share-copy-btn');
+    const nativeBtn = document.getElementById('share-native-btn');
+    if (!copyBtn) return;
+
+    const url = copyBtn.dataset.url;
+    const label = copyBtn.querySelector('.share-copy-label');
+    let resetTimer;
+
+    copyBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(url);
+        } catch (err) {
+            const temp = document.createElement('textarea');
+            temp.value = url;
+            temp.setAttribute('readonly', '');
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            temp.remove();
+        }
+        copyBtn.classList.add('is-copied');
+        if (label) label.textContent = 'Link copied';
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+            copyBtn.classList.remove('is-copied');
+            if (label) label.textContent = 'Copy link';
+        }, 2000);
+    });
+
+    if (nativeBtn && navigator.share) {
+        nativeBtn.hidden = false;
+        nativeBtn.addEventListener('click', () => {
+            navigator.share({
+                title: 'ToDoo',
+                text: 'A calm place for your notes and todoos.',
+                url
+            }).catch(() => {});
+        });
+    }
 }
 
 function setupDownloadToggle() {
@@ -296,7 +338,7 @@ function setupNoteModalEvents() {
     // Close modal
     document.querySelectorAll('.close-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const modal = e.target.closest('.modal');
+            const modal = e.currentTarget.closest('.modal');
             if (modal) {
                 PageManager.hideModal(modal.id);
             }
@@ -307,7 +349,7 @@ function setupNoteModalEvents() {
     document.getElementById('note-favorite-btn').addEventListener('click', () => {
         const btn = document.getElementById('note-favorite-btn');
         btn.classList.toggle('favorited');
-        btn.textContent = btn.classList.contains('favorited') ? '❤️' : '♡';
+        btn.setAttribute('aria-pressed', String(btn.classList.contains('favorited')));
     });
 
     // Add checklist item
@@ -556,12 +598,11 @@ function setupTodoSearchEvents() {
     if (!searchInput) return;
 
     searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.trim();
-        if (!query) {
-            Notes.renderNotes();
-        } else {
-            Notes.searchNotes(query);
-        }
+        Notes.searchNotes(e.target.value);
+    });
+
+    document.querySelectorAll('.notes-filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => Notes.setFilter(btn.dataset.filter));
     });
 }
 

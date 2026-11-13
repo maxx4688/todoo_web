@@ -107,8 +107,56 @@
                     </p>
                 </div>
 
+                <div class="notes-filter" role="tablist" aria-label="Filter todoos">
+                    <span class="notes-filter-pill" aria-hidden="true"></span>
+                    <button type="button" class="notes-filter-btn is-active" data-filter="all" role="tab" aria-selected="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+                        <span>All</span>
+                        <span class="notes-filter-count" id="notes-count-all">0</span>
+                    </button>
+                    <button type="button" class="notes-filter-btn" data-filter="fav" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z"/></svg>
+                        <span>Favorites</span>
+                        <span class="notes-filter-count" id="notes-count-fav">0</span>
+                    </button>
+                </div>
+
                 <div id="notes-container" class="notes-container">
-                    <div id="notes-loading" class="notes-loading">Loading todoos…</div>
+                    <div id="notes-loading" class="notes-loading notes-skeleton" role="status" aria-live="polite">
+                        <span class="sr-only">Loading your todoos…</span>
+                        <div class="skeleton-row" aria-hidden="true">
+                            <span class="sk sk-num"></span>
+                            <div class="sk-body">
+                                <span class="sk sk-title" style="width:42%"></span>
+                                <span class="sk sk-line" style="width:78%"></span>
+                                <span class="sk sk-line" style="width:56%"></span>
+                            </div>
+                        </div>
+                        <div class="skeleton-row" aria-hidden="true">
+                            <span class="sk sk-num"></span>
+                            <div class="sk-body">
+                                <span class="sk sk-title" style="width:30%"></span>
+                                <span class="sk sk-line" style="width:64%"></span>
+                                <span class="sk sk-line" style="width:40%"></span>
+                            </div>
+                        </div>
+                        <div class="skeleton-row" aria-hidden="true">
+                            <span class="sk sk-num"></span>
+                            <div class="sk-body">
+                                <span class="sk sk-title" style="width:50%"></span>
+                                <span class="sk sk-line" style="width:72%"></span>
+                                <span class="sk sk-line" style="width:48%"></span>
+                            </div>
+                        </div>
+                        <div class="skeleton-row" aria-hidden="true">
+                            <span class="sk sk-num"></span>
+                            <div class="sk-body">
+                                <span class="sk sk-title" style="width:36%"></span>
+                                <span class="sk sk-line" style="width:58%"></span>
+                                <span class="sk sk-line" style="width:0"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div id="notes-list" class="notes-list"></div>
                     <div id="empty-state" class="empty-state hidden">
                         <p class="hero-eyebrow">Nothing here yet</p>
@@ -205,31 +253,40 @@
     </div>
 
     <div id="note-modal" class="modal">
-        <div class="modal-content note-modal-content">
+        <div class="modal-content note-modal-content" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
             <div class="modal-header">
-                <h2 class="theme-color" id="note-modal-title">Add new Note..</h2>
-                <button class="close-modal">&times;</button>
+                <h2 id="note-modal-title">New note</h2>
+                <div class="note-modal-header-actions">
+                    <button type="button" class="note-modal-icon-btn favorite-btn" id="note-favorite-btn" aria-label="Favorite" aria-pressed="false" title="Favorite">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z"/></svg>
+                    </button>
+                    <button type="button" class="note-modal-icon-btn close-modal" aria-label="Close" title="Close">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                    </button>
+                </div>
             </div>
             <div class="note-form">
-                <div class="title-row">
-                    <input type="text" id="note-title-input" placeholder="Title of your note." class="form-input">
-                    <button class="favorite-btn" id="note-favorite-btn">♡</button>
-                </div>
-                
+                <input type="text" id="note-title-input" placeholder="Title" class="form-input note-title-field" autocomplete="off">
+
                 <div class="checklist-section">
                     <div class="checklist-header">
-                        <span class="checklist-icon">✓</span>
+                        <svg class="checklist-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6l2 2 3-3M4 13l2 2 3-3M12 7h8M12 14h8M4 19h16"/></svg>
                         <span class="checklist-title">Checklist</span>
                     </div>
-                    <div class="checklist-input-row">
-                        <input type="text" id="checklist-item-input" placeholder="Add checklist item..." class="checklist-input">
-                        <button class="add-checklist-btn" id="add-checklist-btn">+</button>
-                    </div>
                     <div id="checklist-items" class="checklist-items"></div>
+                    <div class="checklist-input-row">
+                        <input type="text" id="checklist-item-input" placeholder="Add an item" class="checklist-input" autocomplete="off">
+                        <button type="button" class="note-modal-icon-btn add-checklist-btn" id="add-checklist-btn" aria-label="Add item" title="Add item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        </button>
+                    </div>
                 </div>
 
-                <textarea id="note-content-input" placeholder="Detailed note here." class="form-textarea large"></textarea>
-                <button class="save-note-btn" id="save-note-btn">Done</button>
+                <textarea id="note-content-input" placeholder="Write your note… (Markdown supported)" class="form-textarea large"></textarea>
+            </div>
+            <div class="note-modal-footer">
+                <button type="button" class="note-modal-cancel close-modal">Cancel</button>
+                <button type="button" class="save-note-btn" id="save-note-btn">Save</button>
             </div>
         </div>
     </div>

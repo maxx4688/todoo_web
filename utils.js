@@ -254,6 +254,7 @@ const PageManager = {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.add('active');
+            document.body.classList.add('modal-open');
         }
     },
 
@@ -262,12 +263,16 @@ const PageManager = {
         if (modal) {
             modal.classList.remove('active');
         }
+        if (!document.querySelector('.modal.active')) {
+            document.body.classList.remove('modal-open');
+        }
     },
 
     hideAllModals() {
         document.querySelectorAll('.modal').forEach(modal => {
             modal.classList.remove('active');
         });
+        document.body.classList.remove('modal-open');
     }
 };
 
